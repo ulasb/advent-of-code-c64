@@ -1,0 +1,22 @@
+# Makefile for Advent of Code 2015 Day 3 - C64 version
+# Requires cc65 to be installed
+
+TARGET = santa_tracker.prg
+SOURCE = santa_tracker.c
+
+# cc65 tools
+CC = cl65
+CFLAGS = -t c64 -O
+
+all: $(TARGET)
+
+$(TARGET): $(SOURCE)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
+
+clean:
+	rm -f $(TARGET) *.o
+
+run: $(TARGET)
+	x64 $(TARGET)
+
+.PHONY: all clean run
