@@ -43,8 +43,8 @@
 
 /* Sue structure */
 typedef struct {
-  int id;
-#define X(name, label, target, rule) int name;
+  int id; /* ID can be up to 500 */
+#define X(name, label, target, rule) signed char name;
   PROPERTIES
 #undef X
 } Sue;
@@ -92,7 +92,7 @@ void print_sue(const Sue *s) {
   printf("SUE %d: ", s->id);
 #define X(name, label, target, rule)                                           \
   if (s->name != UNKNOWN)                                                      \
-    printf("%s %d ", label, s->name);
+    printf("%s %d ", label, (int)s->name);
   PROPERTIES
 #undef X
   printf("\n");
@@ -100,42 +100,43 @@ void print_sue(const Sue *s) {
 
 void run_tests(void) {
   Sue test_sues[MAX_SUES];
-  int i;
-  int count = 0;
+  unsigned char i;
+  unsigned char count = 0;
+  Sue *s;
 
   printf("\n=== RUNNING TESTS ===\n\n");
 
   /* Sue 1: Matches Part 1 exactly */
-  init_sue(&test_sues[count], 1);
-  test_sues[count].children = 3;
-  test_sues[count].cats = 7;
-  test_sues[count].samoyeds = 2;
-  count++;
+  s = &test_sues[count++];
+  init_sue(s, count);
+  s->children = 3;
+  s->cats = 7;
+  s->samoyeds = 2;
 
   /* Sue 2: Fails Part 1 (cats mismatch) */
-  init_sue(&test_sues[count], 2);
-  test_sues[count].cats = 8;
-  test_sues[count].trees = 9;
-  count++;
+  s = &test_sues[count++];
+  init_sue(s, count);
+  s->cats = 8;
+  s->trees = 9;
 
   /* Sue 3: Matches Part 2 (cats > 7, trees > 3) */
-  init_sue(&test_sues[count], 3);
-  test_sues[count].cats = 8;
-  test_sues[count].trees = 4;
-  test_sues[count].children = 3; /* Exact match on regular prop */
-  count++;
+  s = &test_sues[count++];
+  init_sue(s, count);
+  s->cats = 8;
+  s->trees = 4;
+  s->children = 3; /* Exact match on regular prop */
 
   /* Sue 4: Matches Part 1 (exact match on all provided props) */
-  init_sue(&test_sues[count], 4);
-  test_sues[count].goldfish = 5;
-  test_sues[count].perfumes = 1;
-  count++;
+  s = &test_sues[count++];
+  init_sue(s, count);
+  s->goldfish = 5;
+  s->perfumes = 1;
 
   /* Sue 5: Matches Part 2 (goldfish < 5, pomeranians < 3) */
-  init_sue(&test_sues[count], 5);
-  test_sues[count].goldfish = 4;
-  test_sues[count].pomeranians = 2;
-  count++;
+  s = &test_sues[count++];
+  init_sue(s, count);
+  s->goldfish = 4;
+  s->pomeranians = 2;
 
   printf("TARGETS:\n");
   printf("  CHI 3, CAT 7, SAM 2, POM 3, AKI 0\n");
