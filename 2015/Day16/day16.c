@@ -185,14 +185,12 @@ void run_tests(void) {
         printf("\n");
     }
     
-    printf("VERIFICATION:\n");
-    printf("  SUE 1 SHOULD MATCH PART 1 ONLY (ACTUALLY BOTH IF RANGES NOT STRICT)\n");
-    /* Wait, SUE 1 cats=7. Part 2 needs cats > 7. So SUE 1 fails Part 2. */
-    printf("  SUE 2 SHOULD MATCH NONE (CATS=8 != 7 PART1, TREES=9 > 3 PART2 BUT CATS=8 > 7 PART2 - WAIT)\n");
-    /* Sue 2: cats=8 (ok part 2), trees=9 (ok part 2). Rest unknown. Should match Part 2. */
-    printf("  SUE 3 SHOULD MATCH PART 2 ONLY\n");
-    printf("  SUE 4 SHOULD FAIL PART 2 (GOLDFISH 5 NOT < 5)\n");
-    printf("  SUE 5 SHOULD MATCH PART 2\n");
+    printf("VERIFICATION (EXPECTED RESULTS):\n");
+    printf("  SUE 1: Should match Part 1 only.\n");
+    printf("  SUE 2: Should match Part 2 only.\n");
+    printf("  SUE 3: Should match Part 2 only.\n");
+    printf("  SUE 4: Should match Part 1 only.\n");
+    printf("  SUE 5: Should match Part 2 only.\n");
 }
 
 int main(void) {
