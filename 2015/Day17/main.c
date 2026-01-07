@@ -18,7 +18,7 @@
  * Target: 25
  */
 unsigned char containers[] = {20, 15, 10, 5, 5};
-unsigned char num_containers = 5;
+unsigned char num_containers = sizeof(containers) / sizeof(containers[0]);
 unsigned int target = 25;
 
 /* Results */
