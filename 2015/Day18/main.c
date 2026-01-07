@@ -84,6 +84,16 @@ int load_file(const char *filename) {
   return 1;
 }
 
+// Helper to setup simulation and return number of steps
+int setup_simulation(const char *input_file, int is_part2) {
+  if (!load_file(input_file)) {
+    load_sample();
+    return is_part2 ? 5 : 4;
+  }
+  printf("Loaded %dx%d grid from %s\n", grid_width, grid_height, input_file);
+  return 100;
+}
+
 // Count neighbors for cell at (r, c)
 // Because of sentinel borders, we don't need boundary checks!
 unsigned char count_neighbors(int r, int c) {
@@ -121,42 +131,12 @@ void step_simulation(int fix_corners_mode) {
       unsigned char n = count_neighbors(r, c);
       unsigned char state = current_grid[r][c];
 
-      if (state == 1) {
-        // Stay on if 2 or 3 neighbors
-        if (n == 2 || n == 3) {
-          next_grid[r][c] = 1;
-        } else {
-          next_grid[r][c] = 0;
-        }
-      } else {
-        // Turn on if exactly 3 neighbors
-        if (n == 3) {
-          next_grid[r][c] = 1;
-        } else {
-          next_grid[r][c] = 0;
-        }
-      }
+      next_grid[r][c] = (n == 3) || (state == 1 && n == 2);
     }
   }
 
   // Copy next to current
-  // We copy only the active region to save time, or just swap pointers?
-  // Pointers are harder with static 2D arrays (contiguous memory block
-  // requirement). Just memcpy or manual copy. Memcpy is faster often. grid size
-  // is (MAX_SIZE+2)*(MAX_SIZE+2) bytes total? No, we only care about 1..H, 1..W
-  // But we must ensure borders are clean if we rely on them being 0?
-  // Next_grid borders are 0 initialized and never touched loop.
-  // So we just copy the inner part.
-
-  for (r = 1; r <= grid_height; ++r) {
-    // Copy row
-    // memcpy(&current_grid[r][1], &next_grid[r][1], grid_width);
-    // Manual loop might be safer/simpler without relying on string.h overhead
-    // if custom
-    for (c = 1; c <= grid_width; ++c) {
-      current_grid[r][c] = next_grid[r][c];
-    }
-  }
+  memcpy(current_grid, next_grid, sizeof(current_grid));
 
   if (fix_corners_mode) {
     fix_corners();
@@ -180,13 +160,7 @@ void run_part1(const char *input_file) {
   int steps;
   clock_t t0, t1;
 
-  if (!load_file(input_file)) {
-    load_sample();
-    steps = 4; // Sample uses 4 steps
-  } else {
-    printf("Loaded %dx%d grid from %s\n", grid_width, grid_height, input_file);
-    steps = 100; // Real input uses 100 steps
-  }
+  steps = setup_simulation(input_file, 0);
 
   printf("Running Part 1 (%d steps)...\n", steps);
   t0 = clock();
@@ -209,16 +183,7 @@ void run_part2(const char *input_file) {
   int i;
   int steps;
 
-  if (!load_file(input_file)) {
-    load_sample();
-    steps = 5; // Sample part 2 uses 5 steps
-  } else {
-    printf("Loaded %dx%d grid from %s\n", grid_width, grid_height, input_file);
-    steps = 100;
-  }
-
-  // Explicitly turn on corners initially for Part 2
-  fix_corners();
+  steps = setup_simulation(input_file, 1);
 
   printf("Running Part 2 (%d steps)...\n", steps);
 

@@ -1,3 +1,5 @@
+.PHONY: all clean
+
 PROJECT_NAME = day18
 SOURCES = main.c
 PROGRAM = $(PROJECT_NAME).prg
