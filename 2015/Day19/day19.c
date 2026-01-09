@@ -124,16 +124,17 @@ int solve_part1(const char *molecule, Replacement replacements[], int count) {
 
 void str_replace_at(char *dest, const char *src, int pos, const char *old_str,
                     const char *new_str) {
-  int i;
+  int old_len = strlen(old_str);
+  int new_len = strlen(new_str);
+  const char *suffix = src + pos + old_len;
+  int suffix_len = strlen(suffix);
 
   /* Copy prefix */
-  for (i = 0; i < pos; i++) {
-    dest[i] = src[i];
-  }
+  memcpy(dest, src, pos);
 
   /* Copy new string */
-  strcpy(dest + pos, new_str);
+  memcpy(dest + pos, new_str, new_len);
 
-  /* Copy suffix */
-  strcat(dest, src + pos + strlen(old_str));
+  /* Copy suffix and null terminator */
+  memcpy(dest + pos + new_len, suffix, suffix_len + 1);
 }
