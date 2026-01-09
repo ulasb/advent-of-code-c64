@@ -83,6 +83,7 @@ int solve_part1(const char *molecule, Replacement replacements[], int count) {
   int mol_len;
   int exists;
 
+  memset(generated_molecules, 0, sizeof(generated_molecules));
   mol_len = strlen(molecule);
 
   for (i = 0; i < count; i++) {
