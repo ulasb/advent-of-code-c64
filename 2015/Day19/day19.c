@@ -89,14 +89,14 @@ int solve_part1(const char *molecule, Replacement replacements[], int count) {
     rep_from = replacements[i].from;
     rep_to = replacements[i].to;
     from_len = strlen(rep_from);
+    int to_len = strlen(rep_to);
 
     p = molecule;
     while ((p = strstr(p, rep_from)) != NULL) {
       pos = p - molecule;
 
       /* Safety check */
-      if (pos + strlen(rep_to) + (mol_len - pos - from_len) >=
-          MAX_MOLECULE_LEN) {
+      if (mol_len - from_len + to_len >= MAX_MOLECULE_LEN) {
         return -1;
       }
 
