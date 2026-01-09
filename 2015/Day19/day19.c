@@ -42,7 +42,7 @@ int main(void) {
 }
 
 void run_tests(void) {
-  Replacement part1_replacements[3];
+  Replacement part1_replacements[3] = {{"H", "HO"}, {"H", "OH"}, {"O", "HH"}};
   int p1_res;
 
   cprintf("\r\nRUNNING TESTS...\r\n");
