@@ -27,9 +27,9 @@ const Item rings[] = {{"None 1", 0, 0, 0},      {"None 2", 0, 0, 0},
                       {"Damage +3", 100, 3, 0}, {"Defense +1", 20, 0, 1},
                       {"Defense +2", 40, 0, 2}, {"Defense +3", 80, 0, 3}};
 
-#define WEAPON_COUNT 5
-#define ARMOR_COUNT 6
-#define RING_COUNT 8
+#define WEAPON_COUNT (sizeof(weapons) / sizeof(weapons[0]))
+#define ARMOR_COUNT (sizeof(armor) / sizeof(armor[0]))
+#define RING_COUNT (sizeof(rings) / sizeof(rings[0]))
 
 /* Boss Stats (Configurable) */
 typedef struct {
