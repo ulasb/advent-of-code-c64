@@ -86,7 +86,7 @@ unsigned long calculate_presents_part2(unsigned long house) {
       /* Divisor house/i (Elf ID) */
       if (i * i != house) {
         unsigned long other = house / i;
-        if (house / other <= 50)
+        if (i <= 50)
           sum += other;
       }
     }
