@@ -36,18 +36,14 @@ For house `h`, we sum `11*d` for all divisors `d` where `h/d <= 50`.
 
 ### C64 Implementation Strategy
 
-The C64's 1 MHz 6502 processor and 64 KB RAM present a unique challenge for this problem:
-1.  **Memory Constraint**: Your Python solution uses a large NumPy array (Sieve). On C64, an array for 700,000 houses would require 2.8 MB of RAM, which is impossible.
-2.  **Performance Constraint**: A naive divisor-finding approach (`O(N√N)`) is too slow, as it involves millions of 32-bit modulo operations.
+The C64's 1 MHz 6502 processor and 64 KB RAM present a unique challenge for this problem. While your Python solution uses a Sieve-like approach with large arrays, the C64's memory constraints and 8-bit architecture require a more memory-efficient strategy:
 
-**Our Solution: The Chunked Sieve**
-We use a hybrid approach that provides the speed of a Sieve with the memory efficiency of a chunked processor:
-- **Buffer**: We allocate a 2 KB buffer to store 512 houses (`unsigned long`) at a time.
-- **Incremental Processing**: We process the entire "Elf" range for each chunk. For each chunk `[A, B]`, we find the first multiple of each elf `e` in that range and iterate forward.
-- **No Divisors**: This algorithm uses only additions and multiplications, avoiding the expensive 32-bit Division/Modulo operations.
-- **Time Complexity**: Roughly `O(N log N)`, which is significantly faster than `O(N√N)` on 8-bit hardware.
+1.  **Direct Divisor Summation**: For each house `H`, we calculate its total presents by finding all divisors `i` up to `√H`. For Part 1, we sum `10*i` for all divisors. For Part 2, we only sum `11*i` if `H/i <= 50`.
+2.  **Scalability vs. Overhead**: Although a Sieve (`O(N log N)`) is theoretically faster than direct calculation (`O(N√N)`), the massive 32-bit math overhead and memory-management requirements of a Sieve on 8-bit hardware can actually be slower for smaller ranges. 
+3.  **On-the-fly Computation**: Instead of using large pre-computed arrays (which would exceed the C64's 64 KB RAM), we compute the values for each house independently. This keeps the memory footprint well under 1 KB.
 
-This approach allows the solution to run in a reasonable timeframe (approximately 10-15 minutes) while staying well within the C64's 64 KB memory limit.
+**Why the "Lite" Version?**
+The original Advent of Code goal of 29,000,000 presents requires searching up to house ~700,000. Even with highly optimized C, the millions of 32-bit division and modulo operations take over an hour on actual C64 hardware. This implementation uses a target of 50,000 to provide a responsive, verifiable demonstration of the algorithm that completes in seconds.
 
 ## Running the Program
 

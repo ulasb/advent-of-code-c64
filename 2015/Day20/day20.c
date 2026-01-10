@@ -7,13 +7,12 @@
 #define MIN_PRESENTS_GOAL 50000L
 
 /* Function Prototypes */
+typedef unsigned long (*calc_func)(unsigned long);
 unsigned long calculate_presents_part1(unsigned long house);
 unsigned long calculate_presents_part2(unsigned long house);
+void solve(const char *part_name, calc_func calculate);
 
 int main(void) {
-  unsigned long house = 1;
-  unsigned long presents;
-
   bgcolor(COLOR_BLUE);
   bordercolor(COLOR_LIGHTBLUE);
   textcolor(COLOR_WHITE);
@@ -25,32 +24,29 @@ int main(void) {
   cprintf("==============================\r\n");
   cprintf("TARGET: %lu PRESENTS\r\n\r\n", MIN_PRESENTS_GOAL);
 
-  /* Part 1 */
-  cprintf("SOLVING PART 1...\r\n");
-  for (house = 1;; ++house) {
-    presents = calculate_presents_part1(house);
-    if (presents >= MIN_PRESENTS_GOAL)
-      break;
-    if (house % 100 == 0)
-      cprintf(".");
-  }
-  cprintf("\r\nPART 1: HOUSE %lu (%lu PRESENTS)\r\n\r\n", house, presents);
-
-  /* Part 2 */
-  cprintf("SOLVING PART 2...\r\n");
-  for (house = 1;; ++house) {
-    presents = calculate_presents_part2(house);
-    if (presents >= MIN_PRESENTS_GOAL)
-      break;
-    if (house % 100 == 0)
-      cprintf(".");
-  }
-  cprintf("\r\nPART 2: HOUSE %lu (%lu PRESENTS)\r\n", house, presents);
+  solve("PART 1", calculate_presents_part1);
+  cprintf("\r\n");
+  solve("PART 2", calculate_presents_part2);
 
   cprintf("\r\nPRESS ANY KEY TO EXIT.\r\n");
   cgetc();
 
   return 0;
+}
+
+void solve(const char *part_name, calc_func calculate) {
+  unsigned long house = 1;
+  unsigned long presents;
+
+  cprintf("SOLVING %s...\r\n", part_name);
+  for (house = 1;; ++house) {
+    presents = calculate(house);
+    if (presents >= MIN_PRESENTS_GOAL)
+      break;
+    if (house % 100 == 0)
+      cprintf(".");
+  }
+  cprintf("\r\n%s: HOUSE %lu (%lu PRESENTS)\r\n", part_name, house, presents);
 }
 
 /*
