@@ -17,8 +17,9 @@ The solution is implemented in C and optimized for the C64's 6502 processor.
 
 - **Item Tables**: Fixed arrays for Weapons, Armor, and Rings.
 - **Nested Loops**: Iterates through all valid combinations of equipment (5 weapons × 6 armor options × 28 ring combinations = 840 total scenarios).
-- **Simulation**: A fast `simulate_battle` function determines the winner for each combination.
-- **Optimization**: Uses `unsigned char` and `unsigned int` where appropriate to minimize 16-bit overhead on the 8-bit CPU.
+- **Optimized Simulation**: Instead of a turn-by-turn loop, the program calculates the number of rounds to win/lose using integer division (`(hp + dmg - 1) / dmg`). This significantly improves performance on 8-bit hardware by eliminating unnecessary looping and branching.
+- **Memory Optimization**: Uses `unsigned char` and `unsigned int` where appropriate to minimize 16-bit overhead on the 8-bit CPU.
+- **Build System**: A standard `Makefile` with `.PHONY` targets for robust project management.
 
 ## Boss Stats
 

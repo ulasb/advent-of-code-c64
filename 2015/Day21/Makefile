@@ -6,5 +6,6 @@ SOURCE = day21.c
 $(TARGET): $(SOURCE)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
 
+.PHONY: clean
 clean:
 	rm -f $(TARGET) *.o

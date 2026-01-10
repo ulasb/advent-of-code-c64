@@ -41,27 +41,21 @@ typedef struct {
 /* Battle simulation: returns 1 if player wins, 0 if boss wins */
 int simulate_battle(int player_hp, int player_dmg, int player_arm,
                     const Character *boss) {
-  int b_hp = boss->hp;
-  int p_hp = player_hp;
   int p_dmg_done = player_dmg - boss->armor;
   int b_dmg_done = boss->damage - player_arm;
+  int player_turns, boss_turns;
 
   if (p_dmg_done < 1)
     p_dmg_done = 1;
   if (b_dmg_done < 1)
     b_dmg_done = 1;
 
-  while (1) {
-    /* Player attacks */
-    b_hp -= p_dmg_done;
-    if (b_hp <= 0)
-      return 1;
+  /* turns = (hp + damage - 1) / damage */
+  player_turns = (boss->hp + p_dmg_done - 1) / p_dmg_done;
+  boss_turns = (player_hp + b_dmg_done - 1) / b_dmg_done;
 
-    /* Boss attacks */
-    p_hp -= b_dmg_done;
-    if (p_hp <= 0)
-      return 0;
-  }
+  /* Since player attacks first, player wins if player_turns <= boss_turns */
+  return player_turns <= boss_turns;
 }
 
 void main(void) {
