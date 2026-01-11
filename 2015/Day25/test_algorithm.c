@@ -45,7 +45,7 @@ long get_code(int row, int col) {
   long index = get_index(row, col);
   long exponent = index - 1;
   long multiplier_pow = mod_pow(MULTIPLIER, exponent, MODULUS);
-  return (INITIAL_CODE * multiplier_pow) % MODULUS;
+  return safe_mod_mult(INITIAL_CODE, multiplier_pow, MODULUS);
 }
 
 int main(void) {
