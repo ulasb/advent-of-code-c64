@@ -179,6 +179,7 @@ Compare this to Day 19's string replacement algorithm, which required dynamic bu
 - `day25.c` - Main source code with complete implementation
 - `Makefile` - Build script for cc65
 - `README.md` - This file
+- `test_algorithm.c` - Host-based test program to verify the algorithm
 - `day25.prg` - Compiled C64 executable (after running `make`)
 
 ## Building from Scratch
