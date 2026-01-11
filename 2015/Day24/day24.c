@@ -30,7 +30,7 @@ void copy64(uint64_t_c64* dest, uint64_t_c64* src) {
 }
 
 /* 64-bit multiplication: a = a * b */
-void mul64(uint64_t_c64* a, unsigned long b) {
+void mul64(uint64_t_c64* a, unsigned int b) {
     unsigned long r0, r1, r2, r3;
     unsigned long a0 = a->low & 0xFFFF;
     unsigned long a1 = (a->low >> 16) & 0xFFFF;
