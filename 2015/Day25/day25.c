@@ -1,6 +1,5 @@
 #include <conio.h>
-#include <stdio.h>
-#include <stdlib.h>
+
 
 /* Constants for the weather machine sequence */
 #define INITIAL_CODE 20151125L
