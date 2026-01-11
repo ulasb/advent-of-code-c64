@@ -1,52 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-#define INITIAL_CODE 20151125L
-#define MULTIPLIER 252533L
-#define MODULUS 33554393L
-
-long safe_mod_mult(long a, long b, long modulus) {
-  long result = 0;
-  a = a % modulus;
-  b = b % modulus;
-
-  while (b > 0) {
-    if (b % 2 == 1) {
-      result = (result + a) % modulus;
-    }
-    a = (a * 2) % modulus;
-    b = b / 2;
-  }
-
-  return result;
-}
-
-long mod_pow(long base, long exponent, long modulus) {
-  long result = 1;
-  base = base % modulus;
-
-  while (exponent > 0) {
-    if (exponent % 2 == 1) {
-      result = safe_mod_mult(result, base, modulus);
-    }
-    base = safe_mod_mult(base, base, modulus);
-    exponent = exponent / 2;
-  }
-
-  return result;
-}
-
-long get_index(int row, int col) {
-  long diagonal = (long)row + col - 2;
-  return (diagonal * (diagonal + 1)) / 2 + col;
-}
-
-long get_code(int row, int col) {
-  long index = get_index(row, col);
-  long exponent = index - 1;
-  long multiplier_pow = mod_pow(MULTIPLIER, exponent, MODULUS);
-  return safe_mod_mult(INITIAL_CODE, multiplier_pow, MODULUS);
-}
+#include "algorithm.h"
 
 int main(void) {
   printf("Testing Day 25 algorithm...\n");
