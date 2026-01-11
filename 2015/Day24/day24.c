@@ -184,8 +184,13 @@ int main() {
 
     /* First run example data */
     printf("Example Data (10 pkgs):\n");
-    n_weights = 10;
-    memcpy(weights, example_weights, sizeof(example_weights));
+    n_weights = sizeof(example_weights) / sizeof(example_weights[0]);
+    if (n_weights > MAX_WEIGHTS) {
+        printf("Error: too many example weights!\n");
+        cgetc();
+        return 1;
+    }
+    memcpy(weights, example_weights, n_weights * sizeof(unsigned int));
     solve(3);
 
     printf("\nPress any key for Real Data...\n");
