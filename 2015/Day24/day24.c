@@ -198,8 +198,13 @@ int main() {
 
     /* Then run real data simulation */
     printf("\nReal Data Simulation (30 pkgs):\n");
-    n_weights = 30;
-    memcpy(weights, real_weights, sizeof(real_weights));
+    n_weights = sizeof(real_weights) / sizeof(real_weights[0]);
+    if (n_weights > MAX_WEIGHTS) {
+        printf("Error: too many real weights!\n");
+        cgetc();
+        return 1;
+    }
+    memcpy(weights, real_weights, n_weights * sizeof(unsigned int));
     
     printf("\nPart 1 (3 groups):\n");
     solve(3);
