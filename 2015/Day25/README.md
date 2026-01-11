@@ -63,7 +63,7 @@ index = ((row + col - 2) * (row + col - 1)) / 2 + col
 **Code Generation:**
 Each code is generated using modular exponentiation with overflow-safe arithmetic:
 ```
-code = safe_mod_mult(20151125, (252533^(index-1)), 33554393)
+code = safe_mod_mult(20151125, mod_pow(252533, index - 1, 33554393), 33554393)
 ```
 
 ### C64-Specific Challenges and Solutions
