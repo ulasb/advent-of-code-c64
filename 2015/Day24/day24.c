@@ -105,7 +105,11 @@ uint64_t_c64 best_qe;
 unsigned char found_any;
 unsigned long target_weight;
 
-/* Recursive combination search with pruning */
+/* 
+ * Recursive combination search with pruning.
+ * Precondition: The global 'weights' array MUST be sorted in descending order
+ * for the 'Strong prune' condition to be valid.
+ */
 void find_combinations(unsigned char start_idx, unsigned char count, unsigned long current_target, uint64_t_c64* current_qe) {
     unsigned char i;
     if (count == 0) {
@@ -140,9 +144,21 @@ void find_combinations(unsigned char start_idx, unsigned char count, unsigned lo
 
 void solve(unsigned char num_groups) {
     unsigned long total_weight = 0;
-    unsigned char r, i;
+    unsigned char r, i, j;
     char buf[32];
     clock_t start_time, end_time;
+
+    /* Sort weights in descending order for optimal pruning.
+       Uses a simple selection sort, efficient enough for MAX_WEIGHTS=32. */
+    for (i = 0; i < n_weights - 1; ++i) {
+        for (j = i + 1; j < n_weights; ++j) {
+            if (weights[i] < weights[j]) {
+                unsigned int tmp = weights[i];
+                weights[i] = weights[j];
+                weights[j] = tmp;
+            }
+        }
+    }
 
     for (i = 0; i < n_weights; ++i) total_weight += weights[i];
     target_weight = total_weight / num_groups;
