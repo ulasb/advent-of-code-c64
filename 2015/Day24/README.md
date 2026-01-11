@@ -38,7 +38,7 @@ x64sc -autostart day24.prg
 The program runs through two sets of data:
 1. **Example Data**: The 10 packages (1-5, 7-11) provided in the puzzle description.
    - Part 1 Target: 20
-   - Part 1 Min Size: 6
+   - Part 1 Min Size: 2
    - Part 1 Min QE: 99
 2. **Real Data Simulation**: A typical Advent of Code input consisting of ~30 packages (based on primes and common input patterns).
 
