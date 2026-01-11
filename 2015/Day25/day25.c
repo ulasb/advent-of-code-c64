@@ -65,8 +65,8 @@ void run_tests(void) {
   int idx;
 
   /* Key test indices to verify algorithm without overwhelming screen */
-  int key_tests[8] = {0, 1, 2, 6, 12, 18, 24, 35}; /* Corners and some middle */
-  int num_key_tests = 8;
+  int key_tests[] = {0, 1, 2, 6, 12, 18, 24, 35}; /* Corners and some middle */
+  int num_key_tests = sizeof(key_tests) / sizeof(key_tests[0]);
 
   cprintf("\r\nRUNNING KEY TESTS...\r\n");
 
