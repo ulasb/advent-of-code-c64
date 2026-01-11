@@ -7,6 +7,8 @@ TARGET = c64
 CC = cl65
 CFLAGS = -t $(TARGET) -O
 
+.PHONY: all clean
+
 all: $(PROGRAM).prg
 
 $(PROGRAM).prg: $(SOURCES)
