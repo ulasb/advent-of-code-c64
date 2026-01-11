@@ -17,7 +17,7 @@ typedef struct {
 } TestCase;
 
 /* Test cases from the 6x6 grid */
-TestCase test_cases[] = {
+static TestCase test_cases[] = {
   {1, 1, 20151125L}, {1, 2, 18749137L}, {1, 3, 17289845L},
   {1, 4, 30943339L}, {1, 5, 10071777L}, {1, 6, 33511524L},
   {2, 1, 31916031L}, {2, 2, 21629792L}, {2, 3, 16929656L},
