@@ -176,10 +176,12 @@ Compare this to Day 19's string replacement algorithm, which required dynamic bu
 
 ## Files
 
-- `day25.c` - Main source code with complete implementation
-- `Makefile` - Build script for cc65
-- `README.md` - This file
+- `day25.c` - Main C64 program with screen output and test execution
+- `algorithm.h` - Header file declaring shared algorithm functions and constants
+- `algorithm.c` - Core algorithm implementation (shared between C64 and host tests)
 - `test_algorithm.c` - Host-based test program to verify the algorithm
+- `Makefile` - Build script for cc65 and host compilation
+- `README.md` - This file
 - `day25.prg` - Compiled C64 executable (after running `make`)
 
 ## Building from Scratch
@@ -190,6 +192,15 @@ make clean  # Remove all build artifacts
 make        # Rebuild day25.prg
 make run    # Compile and run in VICE
 ```
+
+### Testing the Algorithm
+
+To verify the algorithm works correctly on your host system:
+```bash
+make test   # Compile and run algorithm tests
+```
+
+This compiles `test_algorithm.c` with `algorithm.c` using your host compiler and runs the test suite to ensure the core algorithm is working correctly before testing on C64.
 
 ## Debugging Tips
 
