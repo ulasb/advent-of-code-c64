@@ -42,6 +42,7 @@ The program includes several test cases from the official Advent of Code problem
 The output is displayed directly on the C64 screen using `conio.h`.
 
 ## Optimizations for C64
-- **Memory Management**: Uses a static array of structs to track visited locations, minimizing dynamic memory allocation which is expensive on the 6502.
+- **Memory Management**: Uses a static array of structs to track visited locations. Includes explicit bounds checking to halt the program with an error message if the `MAX_VISITED` limit is reached, ensuring incorrect results are never produced for Part 2.
+- **Safe String Handling**: Uses `snprintf` instead of `strcpy` for processing input strings to prevent potential buffer overflows.
 - **Efficient Searching**: Employs a simple linear search through the visited list. While $O(N^2)$ for the whole process, the list size is small enough (max 1024 points) that it runs quickly on a 1 MHz processor.
 - **Screen Output**: Uses the `conio.h` library for fast, direct-to-screen text output.

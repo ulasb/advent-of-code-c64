@@ -34,11 +34,14 @@ int is_visited(int x, int y) {
 }
 
 void mark_visited(int x, int y) {
-    if (visited_count < MAX_VISITED) {
-        visited[visited_count].x = x;
-        visited[visited_count].y = y;
-        visited_count++;
+    if (visited_count >= MAX_VISITED) {
+        textcolor(COLOR_RED);
+        printf("\nError: visited array full!\n");
+        exit(1);
     }
+    visited[visited_count].x = x;
+    visited[visited_count].y = y;
+    visited_count++;
 }
 
 static char buffer[256];
@@ -60,7 +63,7 @@ void solve(const char* input) {
     visited_count = 0;
     mark_visited(0, 0);
 
-    strcpy(buffer, input);
+    snprintf(buffer, sizeof(buffer), "%s", input);
     token = strtok(buffer, ", ");
     
     textcolor(COLOR_YELLOW);
