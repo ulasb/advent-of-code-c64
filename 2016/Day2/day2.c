@@ -43,10 +43,11 @@ void solve(const char* instructions[], int lines, int part2) {
         while (*p) {
             char move = *p++;
             int next_x = x, next_y = y;
+            const int max_coord = part2 ? 4 : 2;
             if (move == 'U' && next_y > 0) next_y--;
-            else if (move == 'D' && next_y < (part2 ? 4 : 2)) next_y++;
+            else if (move == 'D' && next_y < max_coord) next_y++;
             else if (move == 'L' && next_x > 0) next_x--;
-            else if (move == 'R' && next_x < (part2 ? 4 : 2)) next_x++;
+            else if (move == 'R' && next_x < max_coord) next_x++;
             
             if (part2) {
                 if (pad2[next_y][next_x] != 0) {
