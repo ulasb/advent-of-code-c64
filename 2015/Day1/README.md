@@ -1,6 +1,6 @@
 # Advent of Code 2015 - Day 1 (C64 Edition)
 
-![Day 1 Image](https://github.com/ulasb/C64-Development/blob/main/Advent-of-Code/2015/Day1/day1_screenshot.png)
+![Day 1 Image](https://github.com/ulasb/advent-of-code-c64/blob/main/2015/Day1/day1_screenshot.png)
 
 This is a Commodore 64 implementation of Advent of Code 2015 Day 1, written in C and compiled with cc65. You can get more information, a complete problem definition, and a larger input file on [Advent of Code](http://www.adventofcode.com).
 
