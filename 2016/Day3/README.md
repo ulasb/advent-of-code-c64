@@ -44,10 +44,24 @@ Since no input file is used, the program uses embedded test cases to verify the 
 - `(1, 2, 3)` -> Invalid
 
 ### Part 2 Test Cases:
-Uses two blocks of 3 rows (6 total) to form 6 vertical triangles.
-- Block 1: `(101, 102, 103)`, `(301, 302, 303)`, `(501, 502, 503)`
-- Block 2: `(201, 202, 203)`, `(401, 402, 403)`, `(601, 602, 603)`
-All 6 are valid.
+Uses two blocks of 3 rows (6 total). Triangles are formed by taking 3 consecutive numbers from the **same column**.
+
+**Input Matrix:**
+```
+Row 1: {101, 301, 501}
+Row 2: {102, 302, 502}
+Row 3: {103, 303, 503}
+Row 4: {201, 401, 601}
+Row 5: {202, 402, 602}
+Row 6: {203, 403, 603}
+```
+
+**Triangles Formed:**
+- From Column 1: `(101, 102, 103)` and `(201, 202, 203)`
+- From Column 2: `(301, 302, 303)` and `(401, 402, 403)`
+- From Column 3: `(501, 502, 503)` and `(601, 602, 603)`
+
+All 6 triangles in this test set are valid.
 
 ## Technical Notes
 
