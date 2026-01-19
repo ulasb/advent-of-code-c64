@@ -29,7 +29,7 @@ int validate_room(const char* room, int* sector_id) {
     Freq freqs[26];
     char checksum[MAX_CHECKSUM_LEN];
     const char *p_dash, *p_bracket;
-    int last_dash_idx, bracket_start_idx;
+    int last_dash_idx;
     int i;
     
     /* Initialize frequency table */
@@ -45,7 +45,6 @@ int validate_room(const char* room, int* sector_id) {
     if (p_dash == NULL || p_bracket == NULL) return 0;
     
     last_dash_idx = (int)(p_dash - room);
-    bracket_start_idx = (int)(p_bracket - room);
     
     /* Extract Sector ID */
     *sector_id = atoi(p_dash + 1);
