@@ -51,6 +51,7 @@ int validate_room(const char* room, int* sector_id) {
     *sector_id = atoi(p_dash + 1);
     
     /* Extract Checksum */
+    if (!strchr(p_bracket, ']') || strchr(p_bracket, ']') - p_bracket != 6) return 0;
     strncpy(checksum, p_bracket + 1, 5);
     checksum[5] = '\0';
     
