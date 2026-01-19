@@ -28,10 +28,9 @@ int compare_freq(const void* a, const void* b) {
 int validate_room(const char* room, int* sector_id) {
     Freq freqs[26];
     char checksum[MAX_CHECKSUM_LEN];
+    const char *p_dash, *p_bracket;
+    int last_dash_idx, bracket_start_idx;
     int i;
-    int len = strlen(room);
-    int last_dash = -1;
-    int bracket_start = -1;
     
     /* Initialize frequency table */
     for (i = 0; i < 26; i++) {
@@ -39,23 +38,24 @@ int validate_room(const char* room, int* sector_id) {
         freqs[i].count = 0;
     }
     
-    /* Find markers in the room string */
-    for (i = 0; i < len; i++) {
-        if (room[i] == '-') last_dash = i;
-        if (room[i] == '[') bracket_start = i;
-    }
+    /* Find markers in the room string efficiently */
+    p_dash = strrchr(room, '-');
+    p_bracket = strchr(room, '[');
     
-    if (last_dash == -1 || bracket_start == -1) return 0;
+    if (p_dash == NULL || p_bracket == NULL) return 0;
+    
+    last_dash_idx = (int)(p_dash - room);
+    bracket_start_idx = (int)(p_bracket - room);
     
     /* Extract Sector ID */
-    *sector_id = atoi(room + last_dash + 1);
+    *sector_id = atoi(p_dash + 1);
     
     /* Extract Checksum */
-    strncpy(checksum, room + bracket_start + 1, 5);
+    strncpy(checksum, p_bracket + 1, 5);
     checksum[5] = '\0';
     
     /* Calculate Frequencies */
-    for (i = 0; i < last_dash; i++) {
+    for (i = 0; i < last_dash_idx; i++) {
         if (room[i] >= 'a' && room[i] <= 'z') {
             freqs[room[i] - 'a'].count++;
         }
@@ -75,25 +75,27 @@ int validate_room(const char* room, int* sector_id) {
 /* Decrypt room name using Caesar cipher */
 void decrypt_name(const char* room, int sector_id, char* output) {
     int i;
-    int last_dash = -1;
-    int len = strlen(room);
+    const char* p_dash;
+    int last_dash_idx;
     int shift = sector_id % 26;
     
     /* Find the last dash before the sector ID */
-    for (i = 0; i < len; i++) {
-        if (room[i] == '-') {
-            last_dash = i;
-        }
+    p_dash = strrchr(room, '-');
+    if (p_dash == NULL) {
+        output[0] = '\0';
+        return;
     }
     
-    for (i = 0; i < last_dash; i++) {
+    last_dash_idx = (int)(p_dash - room);
+    
+    for (i = 0; i < last_dash_idx; i++) {
         if (room[i] == '-') {
             output[i] = ' ';
         } else {
             output[i] = (room[i] - 'a' + shift) % 26 + 'a';
         }
     }
-    output[last_dash] = '\0';
+    output[last_dash_idx] = '\0';
 }
 
 /* Unit tests derived from the problem description and original Python code */
