@@ -45,6 +45,8 @@ typedef struct {
     (a) += (b); \
 }
 
+static const char HEX_DIGITS[] = "0123456789abcdef";
+
 /* Global contexts to save stack space */
 MD5_CTX global_ctx;
 uint32 global_x[16];
@@ -102,15 +104,15 @@ void solve_part1(const char *door_id) {
     uint32 index = 0;
     int found = 0;
     uint8 digest[16];
-    char index_str[12];
+    int id_len = strlen(door_id);
     
     memset(password, 0, sizeof(password));
+    strcpy(id_with_index, door_id);
     
     while (found < 8) {
         /* Construct input string: door_id + index */
-        strcpy(id_with_index, door_id);
-        ltoa(index, index_str, 10);
-        strcat(id_with_index, index_str);
+        /* Write index directly after door_id offset */
+        ltoa(index, id_with_index + id_len, 10);
         
         /* MD5 Hash */
         md5_init(&global_ctx);
@@ -120,7 +122,7 @@ void solve_part1(const char *door_id) {
         /* Check for 5 leading zeros (in hex) */
         /* Hex: 00 00 0x ... -> digest[0]==0, digest[1]==0, digest[2] < 16 */
         if (digest[0] == 0 && digest[1] == 0 && digest[2] < 16) {
-            password[found] = "0123456789abcdef"[digest[2] & 0x0F];
+            password[found] = HEX_DIGITS[digest[2] & 0x0F];
             cprintf("\r\nFound char %d: %c (idx: %lu)  \r\n", found + 1, password[found], index);
             found++;
         }
@@ -147,17 +149,17 @@ void solve_part2(const char *door_id) {
     uint32 index = 0;
     int found_count = 0;
     uint8 digest[16];
-    char index_str[12];
     uint8 pos;
     char char_val;
+    int id_len = strlen(door_id);
     
     memset(password, '_', 8);
     password[8] = 0;
+    strcpy(id_with_index, door_id);
     
     while (found_count < 8) {
-        strcpy(id_with_index, door_id);
-        ltoa(index, index_str, 10);
-        strcat(id_with_index, index_str);
+        /* Construct input string: door_id + index */
+        ltoa(index, id_with_index + id_len, 10);
         
         md5_init(&global_ctx);
         md5_update(&global_ctx, (const uint8*)id_with_index, strlen(id_with_index));
@@ -166,7 +168,7 @@ void solve_part2(const char *door_id) {
         if (digest[0] == 0 && digest[1] == 0 && digest[2] < 16) {
             pos = digest[2] & 0x0F;
             if (pos < 8 && password[pos] == '_') {
-                char_val = "0123456789abcdef"[digest[3] >> 4];
+                char_val = HEX_DIGITS[digest[3] >> 4];
                 password[pos] = char_val;
                 found_count++;
                 cprintf("\r\nPos %d found: %c (idx: %lu)  \r\n", pos, char_val, index);
