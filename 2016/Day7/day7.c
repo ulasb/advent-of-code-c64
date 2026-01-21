@@ -137,7 +137,7 @@ void run_tests(void) {
     int i, res;
 
     cprintf("\r\nRUNNING TLS TESTS...\r\n");
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < sizeof(tls_tests) / sizeof(tls_tests[0]); i++) {
         res = supports_tls(tls_tests[i]);
         cprintf("%s: %s\r\n", tls_tests[i], (res == tls_expected[i]) ? "PASS" : "FAIL");
     }
