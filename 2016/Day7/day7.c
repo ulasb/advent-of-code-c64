@@ -19,27 +19,23 @@ int has_abba(const char *s, int len) {
 int supports_tls(const char *ip) {
     int inside = 0;
     int has_outside_abba = 0;
-    int has_inside_abba = 0;
-    int i, start;
-    int len = strlen(ip);
+    int i, start = 0;
 
-    start = 0;
-    for (i = 0; i <= len; i++) {
-        if (ip[i] == '[' || ip[i] == ']' || ip[i] == '\0') {
+    for (i = 0; ; i++) {
+        char c = ip[i];
+        if (c == '[' || c == ']' || c == '\0') {
             int part_len = i - start;
-            if (part_len >= 4) {
-                if (has_abba(ip + start, part_len)) {
-                    if (inside) has_inside_abba = 1;
-                    else has_outside_abba = 1;
-                }
+            if (part_len >= 4 && has_abba(ip + start, part_len)) {
+                if (inside) return 0; /* Found ABBA inside brackets, immediate fail */
+                has_outside_abba = 1;
             }
-            if (ip[i] == '[') inside = 1;
-            else if (ip[i] == ']') inside = 0;
+            if (c == '\0') break;
+            inside = (c == '[');
             start = i + 1;
         }
     }
 
-    return has_outside_abba && !has_inside_abba;
+    return has_outside_abba;
 }
 
 /* ABA storage for Part 2 */
@@ -69,15 +65,15 @@ int check_aba(char a, char b) {
 int supports_ssl(const char *ip) {
     int inside = 0;
     int i, j, start;
-    int len = strlen(ip);
 
     clear_abas();
 
     /* First pass: find all ABAs outside brackets */
     start = 0;
     inside = 0;
-    for (i = 0; i <= len; i++) {
-        if (ip[i] == '[' || ip[i] == ']' || ip[i] == '\0') {
+    for (i = 0; ; i++) {
+        char c = ip[i];
+        if (c == '[' || c == ']' || c == '\0') {
             if (!inside) {
                 int part_len = i - start;
                 for (j = 0; j <= part_len - 3; j++) {
@@ -87,8 +83,8 @@ int supports_ssl(const char *ip) {
                     }
                 }
             }
-            if (ip[i] == '[') inside = 1;
-            else if (ip[i] == ']') inside = 0;
+            if (c == '\0') break;
+            inside = (c == '[');
             start = i + 1;
         }
     }
@@ -96,8 +92,9 @@ int supports_ssl(const char *ip) {
     /* Second pass: find all BABs inside brackets and check corresponding ABA */
     start = 0;
     inside = 0;
-    for (i = 0; i <= len; i++) {
-        if (ip[i] == '[' || ip[i] == ']' || ip[i] == '\0') {
+    for (i = 0; ; i++) {
+        char c = ip[i];
+        if (c == '[' || c == ']' || c == '\0') {
             if (inside) {
                 int part_len = i - start;
                 for (j = 0; j <= part_len - 3; j++) {
@@ -108,8 +105,8 @@ int supports_ssl(const char *ip) {
                     }
                 }
             }
-            if (ip[i] == '[') inside = 1;
-            else if (ip[i] == ']') inside = 0;
+            if (c == '\0') break;
+            inside = (c == '[');
             start = i + 1;
         }
     }
