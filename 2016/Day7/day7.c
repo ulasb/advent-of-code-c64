@@ -143,7 +143,7 @@ void run_tests(void) {
     }
 
     cprintf("\r\nRUNNING SSL TESTS...\r\n");
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < sizeof(ssl_tests) / sizeof(ssl_tests[0]); i++) {
         res = supports_ssl(ssl_tests[i]);
         cprintf("%s: %s\r\n", ssl_tests[i], (res == ssl_expected[i]) ? "PASS" : "FAIL");
     }
