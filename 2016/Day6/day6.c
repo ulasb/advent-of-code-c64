@@ -1,6 +1,7 @@
 #include <conio.h>
 #include <stdio.h>
 #include <string.h>
+#include <limits.h>
 
 /* Constants for the problem */
 #define SAMPLE_LEN 16
@@ -26,8 +27,7 @@ static const char *sample_input[SAMPLE_LEN] = {
     "enarar"
 };
 
-/* Frequency table: columns x alphabet */
-static unsigned int frequency[SAMPLE_COLS][26];
+
 
 void run_tests(void);
 void solve(const char **input, int num_rows, int num_cols);
@@ -56,16 +56,14 @@ void run_tests(void) {
 }
 
 void solve(const char **input, int num_rows, int num_cols) {
+    /* Frequency table: columns x alphabet */
+    static unsigned int frequency[SAMPLE_COLS][26];
     int r, c, i;
     char part1[SAMPLE_COLS + 1];
     char part2[SAMPLE_COLS + 1];
 
     /* Reset frequency table */
-    for (c = 0; c < num_cols; ++c) {
-        for (i = 0; i < 26; ++i) {
-            frequency[c][i] = 0;
-        }
-    }
+    memset(frequency, 0, sizeof(frequency));
 
     /* Fill frequency table */
     for (r = 0; r < num_rows; ++r) {
@@ -80,7 +78,7 @@ void solve(const char **input, int num_rows, int num_cols) {
     /* Find most and least common per column */
     for (c = 0; c < num_cols; ++c) {
         unsigned int max_count = 0;
-        unsigned int min_count = 0xFFFF;
+        unsigned int min_count = UINT_MAX;
         int max_idx = 0;
         int min_idx = 0;
 
