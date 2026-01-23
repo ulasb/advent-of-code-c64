@@ -41,12 +41,7 @@ int main(void) {
 }
 
 void init_grid(void) {
-  int y, x;
-  for (y = 0; y < GRID_HEIGHT; y++) {
-    for (x = 0; x < GRID_WIDTH; x++) {
-      grid[y][x] = '.';
-    }
-  }
+  memset(grid, '.', sizeof(grid));
 }
 
 void rect(int a, int b) {
@@ -65,9 +60,7 @@ void rotate_row(int row, int by) {
   by %= GRID_WIDTH;
   if (by == 0) return;
 
-  for (x = 0; x < GRID_WIDTH; x++) {
-    temp[x] = grid[row][x];
-  }
+  memcpy(temp, grid[row], GRID_WIDTH);
   for (x = 0; x < GRID_WIDTH; x++) {
     grid[row][(x + by) % GRID_WIDTH] = temp[x];
   }
@@ -91,25 +84,30 @@ void rotate_col(int col, int by) {
 void process_command(const char *cmd) {
   int a, b;
   char *p;
-  if (strncmp(cmd, "rect ", 5) == 0) {
-    a = atoi(cmd + 5);
-    p = strchr(cmd + 5, 'x');
+  const char rect_prefix[] = "rect ";
+  const char row_prefix[] = "rotate row y=";
+  const char col_prefix[] = "rotate column x=";
+  const char by_msg[] = " by ";
+
+  if (strncmp(cmd, rect_prefix, sizeof(rect_prefix) - 1) == 0) {
+    a = atoi(cmd + sizeof(rect_prefix) - 1);
+    p = strchr(cmd + sizeof(rect_prefix) - 1, 'x');
     if (p) {
       b = atoi(p + 1);
       rect(a, b);
     }
-  } else if (strncmp(cmd, "rotate row y=", 13) == 0) {
-    a = atoi(cmd + 13);
-    p = strstr(cmd + 13, " by ");
+  } else if (strncmp(cmd, row_prefix, sizeof(row_prefix) - 1) == 0) {
+    a = atoi(cmd + sizeof(row_prefix) - 1);
+    p = strstr(cmd + sizeof(row_prefix) - 1, by_msg);
     if (p) {
-      b = atoi(p + 4);
+      b = atoi(p + sizeof(by_msg) - 1);
       rotate_row(a, b);
     }
-  } else if (strncmp(cmd, "rotate column x=", 16) == 0) {
-    a = atoi(cmd + 16);
-    p = strstr(cmd + 16, " by ");
+  } else if (strncmp(cmd, col_prefix, sizeof(col_prefix) - 1) == 0) {
+    a = atoi(cmd + sizeof(col_prefix) - 1);
+    p = strstr(cmd + sizeof(col_prefix) - 1, by_msg);
     if (p) {
-      b = atoi(p + 4);
+      b = atoi(p + sizeof(by_msg) - 1);
       rotate_col(a, b);
     }
   }
@@ -127,16 +125,16 @@ int count_pixels(void) {
 
 void display_grid(void) {
   int y, x;
-  cprintf("\r\nLEFT HALF (Cols 0-24):\r\n");
+  cprintf("\r\nLEFT HALF (Cols 0-%d):\r\n", (GRID_WIDTH / 2) - 1);
   for (y = 0; y < GRID_HEIGHT; y++) {
-    for (x = 0; x < 25; x++) {
+    for (x = 0; x < GRID_WIDTH / 2; x++) {
       cputc(grid[y][x] == '#' ? '#' : '.');
     }
     cprintf("\r\n");
   }
-  cprintf("\r\nRIGHT HALF (Cols 25-49):\r\n");
+  cprintf("\r\nRIGHT HALF (Cols %d-%d):\r\n", GRID_WIDTH / 2, GRID_WIDTH - 1);
   for (y = 0; y < GRID_HEIGHT; y++) {
-    for (x = 25; x < 50; x++) {
+    for (x = GRID_WIDTH / 2; x < GRID_WIDTH; x++) {
       cputc(grid[y][x] == '#' ? '#' : '.');
     }
     cprintf("\r\n");
@@ -155,10 +153,11 @@ void run_tests(void) {
     "rotate row y=1 by 10",
     "rotate column x=0 by 2"
   };
+  int num_cmds = sizeof(test_cmds) / sizeof(test_cmds[0]);
 
   cprintf("\r\nRUNNING TESTS...\r\n");
 
-  for (i = 0; i < 8; i++) {
+  for (i = 0; i < num_cmds; i++) {
     process_command(test_cmds[i]);
   }
 
