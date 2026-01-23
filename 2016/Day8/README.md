@@ -72,7 +72,7 @@ We use hardcoded test cases derived from the problem description to verify the s
 - `cprintf` and `cputc` are used for direct character rendering.
 - `bgcolor`, `bordercolor`, and `textcolor` are used to set a "terminal-like" look.
 
-#### 4. 40-Column Screen Handling
+#### 3. 40-Column Screen Handling
 **Problem:** The C64 screen is 40 columns wide, but the puzzle grid is 50 columns. Printing a full row causes automatic wrapping, making the Part 2 message unreadable.
 
 **Solution:** The logic splits the 50x6 grid into two 25x6 blocks (Left Half and Right Half) printed sequentially. This prevents wrapping and maintains the visual integrity of the 5x6 pixel characters used for the message.
