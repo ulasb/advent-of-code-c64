@@ -58,15 +58,18 @@ The implementation ports the logic from the Python solution:
 - **Part 1:** Linear scan, parsing markers `(LxR)` and calculating length.
 - **Part 2:** Recursive scan, processing markers within markers.
 
-### C64-Specific Challenges
+### Implementation Improvements
 
-#### 1. Integer Sizes
-The C64's `long` is 32-bit (max 4,294,967,295). While sufficient for the provided test cases, extremely large inputs in Part 2 might exceed this limit.
+#### 1. Robust Parsing
+We use `sscanf` to parse compression markers `(LxR)`. This is more robust than manual parsing as it validates the format and handles potential malformed input gracefully by checking the return value.
 
-#### 2. Recursion and Stack
-Part 2 uses recursion. To avoid stack overflow on the C64's limited stack, we use a software-based approach or ensure the nesting depth remains within bounds. `cc65` uses a software stack (typically 2KB) which is usually sufficient for these depths.
+#### 2. Portability and Integer Safety
+The implementation uses `size_t` for all string indices and lengths. This ensures portability and prevents potential overflow issues on platforms where `unsigned int` might be smaller than the addressable memory space.
 
-#### 3. conio.h for Output
+#### 3. String Truncation
+String truncation for test output is handled safely via `snprintf`, avoiding manual buffer manipulation and potential errors.
+
+#### 4. conio.h for Output
 Following the project standard, we use `conio.h` for stable and persistent screen output.
 
 ## Files

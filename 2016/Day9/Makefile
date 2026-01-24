@@ -3,6 +3,7 @@
 
 TARGET = day9.prg
 SOURCE = day9.c
+OBJECT = day9.o
 
 # cc65 tools
 CC = cl65
@@ -10,11 +11,14 @@ CFLAGS = -t c64 -O
 
 all: $(TARGET)
 
-$(TARGET): $(SOURCE)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
+$(TARGET): $(OBJECT)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECT)
+
+$(OBJECT): $(SOURCE)
+	$(CC) $(CFLAGS) -c $(SOURCE)
 
 clean:
-	rm -f $(TARGET) *.o
+	rm -f $(TARGET) $(OBJECT)
 
 run: $(TARGET)
 	x64 $(TARGET)
