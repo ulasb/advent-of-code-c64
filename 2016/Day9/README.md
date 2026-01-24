@@ -1,0 +1,76 @@
+# Advent of Code 2016 - Day 9 (C64 Edition)
+
+This is a Commodore 64 implementation of Advent of Code 2016 Day 9, written in C and compiled with cc65.
+
+## The Problem
+
+**Day 9: Explosives in Cyberspace**
+
+The challenge is to calculate the decompressed length of a custom compression format.
+- **Part 1:** Decompress using version 1 rules (markers are not recursive). ✅ **Implemented**
+- **Part 2:** Decompress using version 2 rules (recursive markers). ✅ **Implemented**
+
+## Running the Program
+
+### Requirements
+- [cc65](https://cc65.github.io/) compiler suite
+- [VICE](https://vice-emu.sourceforge.io/) or another C64 emulator (like `x64`)
+
+### Compilation
+To compile the program, run:
+```bash
+make
+```
+This produces `day9.prg`.
+
+### Testing
+To run it in VICE:
+```bash
+make run
+```
+Or load `day9.prg` manually into your emulator.
+
+The program will run automated tests and display results on screen. Press Enter to exit when complete.
+
+## Test Cases Included
+
+We use hardcoded test cases derived from the problem description and the original Python implementation.
+
+### Part 1 Tests
+- `ADVENT` -> 6
+- `A(1x5)BC` -> 7
+- `(3x3)XYZ` -> 9
+- `A(2x2)BCD(2x2)EFG` -> 11
+- `(6x1)(1x3)A` -> 6
+- `X(8x2)(3x3)ABCY` -> 18
+
+### Part 2 Tests
+- `(3x3)XYZ` -> 9
+- `X(8x2)(3x3)ABCY` -> 20
+- `(27x12)(20x12)(13x14)(7x10)(1x12)A` -> 241920
+- `(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN` -> 445
+
+## Technical Notes
+
+### Algorithm
+
+The implementation ports the logic from the Python solution:
+- **Part 1:** Linear scan, parsing markers `(LxR)` and calculating length.
+- **Part 2:** Recursive scan, processing markers within markers.
+
+### C64-Specific Challenges
+
+#### 1. Integer Sizes
+The C64's `long` is 32-bit (max 4,294,967,295). While sufficient for the provided test cases, extremely large inputs in Part 2 might exceed this limit.
+
+#### 2. Recursion and Stack
+Part 2 uses recursion. To avoid stack overflow on the C64's limited stack, we use a software-based approach or ensure the nesting depth remains within bounds. `cc65` uses a software stack (typically 2KB) which is usually sufficient for these depths.
+
+#### 3. conio.h for Output
+Following the project standard, we use `conio.h` for stable and persistent screen output.
+
+## Files
+- `day9.c` - Main source code
+- `Makefile` - Build script
+- `README.md` - This file
+- `day9.prg` - Compiled C64 executable
