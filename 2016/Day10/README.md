@@ -76,4 +76,4 @@ typedef struct {
 ## Files
 - `day10.c` - Main source code
 - `Makefile` - Build script
-- `README.md` - This fileßß
+- `README.md` - This file
