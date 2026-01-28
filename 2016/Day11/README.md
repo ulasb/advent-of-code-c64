@@ -64,14 +64,15 @@ The program will run automated tests (including the example from the puzzle) and
 #### 1. Memory Management
 The C64 has 64KB RAM. We use:
 - **Bitset:** 7.5 KB for visited states.
-- **Queue:** 15 KB (2500 entries * 6 bytes per state).
+- **Queue:** 24 KB (4000 entries * 6 bytes per state).
 - **Lookup Table:** Precomputed combinatorial coefficients (`choose[n][k]`).
-- Total memory usage is well within the 64KB limit for Part 1.
+- Total BSS memory usage is ~32 KB, leaving ~32 KB for the program code and system stack.
 
 #### 2. Efficiency
-- `cc65` is used with `-O` optimization.
-- Global arrays are used to avoid stack overflow.
-- State packing and unpacking are optimized for the 6502's limited register set where possible.
+- **Queue Shifting:** To prevent fragmentation in the limited 4000-state queue, the program performs a `memmove` at the end of each BFS depth level. This resets the queue head to 0, ensuring maximum space for the next depth's states.
+- **In-place Progress Bar:** To keep the screen clean and prevent scrolling of test results, the solver updates real-time progress (depth and state count) by overwriting the same screen line using `gotoxy` and `cclear`.
+- **Optimization:** Compiled with `cc65 -O` for maximum 6502 execution speed.
+- State packing and unpacking are optimized for the 6502's limited register set.
 
 ### Known Limitations
 
