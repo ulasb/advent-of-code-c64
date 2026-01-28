@@ -58,7 +58,7 @@ unsigned int get_state_id(State *s) {
     
     // Combination index for 5 items from 16 types:
     // Index = choose(p1, 1) + choose(p2+1, 2) + choose(p3+2, 3) + choose(p4+3, 4) + choose(p5+4, 5)
-    id = (unsigned int)s->elevator * 15504;
+    id = (unsigned int)s->elevator * COMBINATIONS_COUNT;
     id += choose[sorted[0]][1];
     id += choose[sorted[1] + 1][2];
     id += choose[sorted[2] + 2][3];
