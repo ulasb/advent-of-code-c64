@@ -14,6 +14,7 @@
 #define NUM_FLOORS 4
 #define QUEUE_SIZE 4000
 #define BITSET_SIZE 7752
+#define COMBINATIONS_COUNT 15504
 
 // Combinations table choose[n][k]
 unsigned int choose[21][6];
@@ -76,23 +77,21 @@ int is_visited(unsigned int id) {
 }
 
 int is_valid(State *s) {
-    int f, p;
-    for (f = 0; f < NUM_FLOORS; ++f) {
-        int has_gen = 0;
-        for (p = 0; p < MAX_PAIRS; ++p) {
-            if ((s->pairs[p] >> 2) == f) {
-                has_gen = 1;
-                break;
-            }
-        }
-        if (!has_gen) continue;
-        
-        for (p = 0; p < MAX_PAIRS; ++p) {
-            // If chip is on this floor...
-            if ((s->pairs[p] & 3) == f) {
-                // ...and its generator is NOT on this floor
-                if ((s->pairs[p] >> 2) != f) return 0;
-            }
+    unsigned char floor_gens[4];
+    unsigned char floor_chips[4];
+    int p, f;
+
+    memset(floor_gens, 0, 4);
+    memset(floor_chips, 0, 4);
+
+    for (p = 0; p < MAX_PAIRS; ++p) {
+        floor_gens[s->pairs[p] >> 2] |= (1 << p);
+        floor_chips[s->pairs[p] & 3] |= (1 << p);
+    }
+
+    for (f = 0; f < 4; ++f) {
+        if (floor_gens[f] && (floor_chips[f] & floor_gens[f]) != floor_chips[f]) {
+            return 0;
         }
     }
     return 1;
