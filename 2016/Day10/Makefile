@@ -14,7 +14,7 @@ $(TARGET): $(SOURCE)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
 
 clean:
-	rm -f $(TARGET) *.o
+	rm -f $(TARGET)
 
 run: $(TARGET)
 	x64 $(TARGET)

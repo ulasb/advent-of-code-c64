@@ -17,13 +17,14 @@ typedef struct {
     int low_id;
     char high_type;
     int high_id;
+    char defined;    /* 1 if directions are set */
 } Bot;
 
 /* Global state to save stack space */
 Bot bots[MAX_BOTS];
 int outputs[MAX_OUTPUTS];
 int ready_queue[MAX_BOTS];
-int head, tail;
+int head, tail, q_count;
 
 /* Function prototypes */
 void init_system(void);
@@ -53,25 +54,28 @@ int main(void) {
 
 void init_system(void) {
     int i;
-    for (i = 0; i < MAX_BOTS; i++) {
-        bots[i].chip_count = 0;
-        bots[i].low_type = 0;
-        bots[i].low_id = 0;
-        bots[i].high_type = 0;
-        bots[i].high_id = 0;
-    }
+    memset(bots, 0, sizeof(bots));
     for (i = 0; i < MAX_OUTPUTS; i++) {
         outputs[i] = -1;
     }
     head = 0;
     tail = 0;
+    q_count = 0;
+}
+
+void queue_bot(int bot_id) {
+    if (q_count < MAX_BOTS) {
+        ready_queue[tail] = bot_id;
+        tail = (tail + 1) % MAX_BOTS;
+        q_count++;
+    }
 }
 
 void add_chip(int bot_id, int value) {
     if (bot_id >= MAX_BOTS) return;
     bots[bot_id].chips[bots[bot_id].chip_count++] = value;
-    if (bots[bot_id].chip_count == 2) {
-        ready_queue[tail++] = bot_id;
+    if (bots[bot_id].chip_count == 2 && bots[bot_id].defined) {
+        queue_bot(bot_id);
     }
 }
 
@@ -81,13 +85,22 @@ void set_directions(int bot_id, char l_type, int l_id, char h_type, int h_id) {
     bots[bot_id].low_id = l_id;
     bots[bot_id].high_type = h_type;
     bots[bot_id].high_id = h_id;
+    bots[bot_id].defined = 1;
+    
+    /* If it already has 2 chips, it can now be queued */
+    if (bots[bot_id].chip_count == 2) {
+        queue_bot(bot_id);
+    }
 }
 
 void process_bots(int target_low, int target_high) {
-    while (head < tail) {
-        int bot_id = ready_queue[head++];
+    while (q_count > 0) {
+        int bot_id = ready_queue[head];
         Bot *b = &bots[bot_id];
         int low, high;
+
+        head = (head + 1) % MAX_BOTS;
+        q_count--;
 
         if (b->chips[0] < b->chips[1]) {
             low = b->chips[0];
