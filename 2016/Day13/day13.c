@@ -6,7 +6,8 @@
 /* Constants */
 #define MAP_SIZE 64
 #define VISITED_SIZE (MAP_SIZE * MAP_SIZE / 8)
-#define QUEUE_SIZE 512
+#define QUEUE_SIZE (MAP_SIZE * MAP_SIZE)
+#define QUEUE_OVERFLOW_ERROR -2
 
 /* Global buffers to stay off the stack */
 unsigned char visited[VISITED_SIZE];
