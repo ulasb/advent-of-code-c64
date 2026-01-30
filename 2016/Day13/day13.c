@@ -27,6 +27,9 @@ void set_visited(unsigned char x, unsigned char y);
 unsigned char get_visited(unsigned char x, unsigned char y);
 
 int main(void) {
+    int part1_res;
+    int part2_res;
+
     bgcolor(COLOR_BLUE);
     bordercolor(COLOR_LIGHTBLUE);
     textcolor(COLOR_WHITE);
@@ -40,15 +43,21 @@ int main(void) {
     run_tests();
 
     cprintf("\r\n--- FINAL ANSWERS ---\r\n");
-    int part1_res = solve_part1(1, 1, 31, 39, 1358);
+    part1_res = solve_part1(1, 1, 31, 39, 1358);
+
     if (part1_res == ERR_QUEUE_OVERFLOW) {
         cprintf("PART 1: ERROR - Queue Overflow\r\n");
     } else {
         cprintf("PART 1: %d\r\n", part1_res);
     }
-    cprintf("PART 1: %d\r\n", solve_part1(1, 1, 31, 39, 1358));
+
     /* Part 2: Start (1,1), Max 50 steps, Favorite 1358 */
-    cprintf("PART 2: %d\r\n", solve_part2(1, 1, 50, 1358));
+    part2_res = solve_part2(1, 1, 50, 1358);
+    if (part2_res == ERR_QUEUE_OVERFLOW) {
+        cprintf("PART 2: ERROR - Queue Overflow\r\n");
+    } else {
+        cprintf("PART 2: %d\r\n", part2_res);
+    }
 
     cprintf("\r\nPRESS ENTER TO EXIT.\r\n");
     cgetc();
