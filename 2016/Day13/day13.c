@@ -40,7 +40,12 @@ int main(void) {
     run_tests();
 
     cprintf("\r\n--- FINAL ANSWERS ---\r\n");
-    /* Part 1: Start (1,1), Target (31,39), Favorite 1358 */
+    int part1_res = solve_part1(1, 1, 31, 39, 1358);
+    if (part1_res == ERR_QUEUE_OVERFLOW) {
+        cprintf("PART 1: ERROR - Queue Overflow\r\n");
+    } else {
+        cprintf("PART 1: %d\r\n", part1_res);
+    }
     cprintf("PART 1: %d\r\n", solve_part1(1, 1, 31, 39, 1358));
     /* Part 2: Start (1,1), Max 50 steps, Favorite 1358 */
     cprintf("PART 2: %d\r\n", solve_part2(1, 1, 50, 1358));
