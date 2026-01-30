@@ -55,10 +55,7 @@ unsigned char is_wall(unsigned char x, unsigned char y, unsigned int favorite_nu
     unsigned int val;
     unsigned char bits = 0;
     
-    /* Using the simplified formula: (x+y)^2 + 3x + y + favorite_number */
-    /* Wait, checking the original: x*x + 3*x + 2*x*y + y + y*y + FAVORITE_NUMBER */
-    /* x*x + 2*x*y + y*y + 3*x + y + FAVORITE_NUMBER */
-    /* (x+y)*(x+y) + 3*x + y + FAVORITE_NUMBER */
+/* The formula x*x + 3*x + 2*x*y + y + y*y + favorite_number simplifies to (x+y)*(x+y) + 3*x + y + favorite_number */
     unsigned int xpyp2;
     unsigned int x_u = x;
     unsigned int y_u = y;
