@@ -69,7 +69,8 @@ The program will run automated tests and display results on screen, followed by 
 - `day13.c` - Main source code (Parts 1 & 2)
 - `Makefile` - Build script for cc65
 - `README.md` - This file
-- `day13.prg` - Compiled C64 executable
+
+*Note: `day13.prg` is a compiled build artifact and should not be committed to source control.*
 
 ---
 For more solutions and information, please visit the [main project repository](https://github.com/ulasb/advent-of-code-c64).

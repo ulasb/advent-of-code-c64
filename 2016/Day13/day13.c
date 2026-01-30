@@ -80,7 +80,6 @@ void set_visited(unsigned char x, unsigned char y) {
 
 unsigned char get_visited(unsigned char x, unsigned char y) {
     unsigned int pos = (unsigned int)y * MAP_SIZE + x;
-    if (x >= MAP_SIZE || y >= MAP_SIZE) return 1; /* Treat out of bounds as visited/wall */
     return (visited[pos >> 3] & (1 << (pos & 7))) != 0;
 }
 
@@ -133,7 +132,7 @@ int solve_part1(unsigned char start_x, unsigned char start_y,
                     next_level_size++;
                     
                     /* Queue overflow check */
-                    if (qtail == qhead) return -2; 
+                    if (qtail == qhead) return ERR_QUEUE_OVERFLOW; 
                 }
             }
         }
@@ -190,7 +189,7 @@ int solve_part2(unsigned char start_x, unsigned char start_y,
                     next_level_size++;
                     total_visited++;
                     
-                    if (qtail == qhead) return -2;
+                    if (qtail == qhead) return ERR_QUEUE_OVERFLOW;
                 }
             }
         }
