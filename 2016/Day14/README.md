@@ -45,6 +45,7 @@ MD5 is computationally expensive for the 6502 processor (1 MHz). To make this vi
 - **Part 2:** This is **2017 times slower** than Part 1. Finding even a single key can take days of real time. This mode is included for logic completeness but is completely impractical without a SuperCPU or extreme emulation acceleration.
 
 ## Files
-- `day14.c` - Main source code including MD5 and puzzle logic
+- `day14.c` - Main source code for Day 14 puzzle logic
+- `md5.c`/`md5.h` - Shared MD5 implementation
 - `Makefile` - Build script
 - `README.md` - This file
