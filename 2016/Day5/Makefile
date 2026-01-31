@@ -2,7 +2,8 @@
 # Requires cc65 to be installed
 
 TARGET = day5.prg
-SOURCE = day5.c
+SOURCES = day5.c md5.c
+OBJECTS = day5.o md5.o
 
 # cc65 tools
 CC = cl65
@@ -10,13 +11,13 @@ CFLAGS = -t c64 -O -Oi
 
 all: $(TARGET)
 
-$(TARGET): $(SOURCE)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
+$(TARGET): $(SOURCES)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
 
 clean:
 	rm -f $(TARGET) *.o
 
 run: $(TARGET)
-	x64 $(TARGET)
+	x64sc $(TARGET)
 
 .PHONY: all clean run

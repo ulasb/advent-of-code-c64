@@ -60,7 +60,8 @@ Because of this, the C64 version is primarily a **proof of concept** of the logi
 
 ## Files
 
-- `day5.c` - Main source code with MD5 implementation.
+- `day5.c` - Main source code for Day 5 puzzle logic.
+- `md5.c`/`md5.h` - Shared MD5 implementation.
 - `Makefile` - Build script for cc65.
 - `README.md` - This file.
 - `day5.prg` - Compiled C64 executable.
