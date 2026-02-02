@@ -53,11 +53,22 @@ unsigned long solve(Disc* discs, int count) {
     return time;
 }
 
-void run_test_case(const char* name, Disc* discs, int count) {
+void run_test_case(const char* name, Disc* discs, int count, unsigned long expected, int check) {
     unsigned long result;
     cprintf("TEST: %s\r\n", name);
     result = solve(discs, count);
-    cprintf("RESULT: %lu\r\n\r\n", result);
+    cprintf("RESULT: %lu\r\n", result);
+    if (check) {
+        if (result == expected) {
+            textcolor(COLOR_GREEN);
+            cprintf("STATUS: PASS\r\n");
+        } else {
+            textcolor(COLOR_RED);
+            cprintf("STATUS: FAIL (EXPECTED %lu)\r\n", expected);
+        }
+        textcolor(COLOR_WHITE);
+    }
+    cprintf("\r\n");
 }
 
 int main(void) {
@@ -94,9 +105,9 @@ int main(void) {
     cprintf("ADVENT OF CODE 2016 - DAY 15\r\n");
     cprintf("----------------------------\r\n\r\n");
 
-    run_test_case("EXAMPLE (EXPECTED 5)", example, 2);
-    run_test_case("PART 1", part1, 6);
-    run_test_case("PART 2", part2, 7);
+    run_test_case("EXAMPLE", example, 2, 5, 1);
+    run_test_case("PART 1", part1, 6, 0, 0);
+    run_test_case("PART 2", part2, 7, 0, 0);
 
     cprintf("PRESS ANY KEY TO EXIT.\r\n");
     cgetc();
