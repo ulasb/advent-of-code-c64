@@ -18,7 +18,9 @@ char test_next[100];
 void run_tests(void);
 void generate_dragon(char *data, int target_len);
 void calculate_checksum(char *data, char *checksum, int len);
+void get_final_checksum(char *buf);
 void solve_part1(const char *initial_state, int disk_size);
+void assert_string(const char *label, const char *actual, const char *expected);
 
 int main(void) {
   bgcolor(COLOR_BLUE);
@@ -80,9 +82,16 @@ void calculate_checksum(char *data, char *result, int len) {
   result[res_len] = '\0';
 }
 
-void solve_part1(const char *initial_state, int disk_size) {
-  int cur_len;
+void get_final_checksum(char *buf) {
+  int cur_len = strlen(buf);
+  while (cur_len % 2 == 0) {
+    calculate_checksum(buf, temp_checksum_buf, cur_len);
+    strcpy(buf, temp_checksum_buf);
+    cur_len = strlen(buf);
+  }
+}
 
+void solve_part1(const char *initial_state, int disk_size) {
   strcpy(data_buf, initial_state);
   generate_dragon(data_buf, disk_size);
   
@@ -90,52 +99,34 @@ void solve_part1(const char *initial_state, int disk_size) {
   data_buf[disk_size] = '\0';
   
   calculate_checksum(data_buf, checksum_buf, disk_size);
-  cur_len = strlen(checksum_buf);
-  
-  while (cur_len % 2 == 0) {
-    calculate_checksum(checksum_buf, temp_checksum_buf, cur_len);
-    strcpy(checksum_buf, temp_checksum_buf);
-    cur_len = strlen(checksum_buf);
-  }
+  get_final_checksum(checksum_buf);
   
   cprintf("PART 1 RESULT: %s\r\n", checksum_buf);
 }
 
 void run_tests(void) {
-  int cur_len;
-
   cprintf("\r\nRUNNING TESTS...\r\n");
 
   /* Test generate */
   strcpy(test_data, "1");
   generate_dragon(test_data, 3);
-  cprintf("TEST GEN (1->3): %s ", test_data);
-  if (strcmp(test_data, "100") == 0) cprintf("PASS\r\n");
-  else cprintf("FAIL\r\n");
+  assert_string("TEST GEN (1->3)", test_data, "100");
 
   strcpy(test_data, "0");
   generate_dragon(test_data, 3);
-  cprintf("TEST GEN (0->3): %s ", test_data);
-  if (strcmp(test_data, "001") == 0) cprintf("PASS\r\n");
-  else cprintf("FAIL\r\n");
+  assert_string("TEST GEN (0->3)", test_data, "001");
 
   strcpy(test_data, "11111");
   generate_dragon(test_data, 11);
-  cprintf("TEST GEN (11111->11): %s ", test_data);
-  if (strcmp(test_data, "11111000000") == 0) cprintf("PASS\r\n");
-  else cprintf("FAIL\r\n");
+  assert_string("TEST GEN (11111->11)", test_data, "11111000000");
 
   strcpy(test_data, "111100001010");
   generate_dragon(test_data, 25);
-  cprintf("TEST GEN (111100001010->25): %s ", test_data);
-  if (strcmp(test_data, "1111000010100101011110000") == 0) cprintf("PASS\r\n");
-  else cprintf("FAIL\r\n");
+  assert_string("TEST GEN (111100001010->25)", test_data, "1111000010100101011110000");
 
   /* Test checksum */
   calculate_checksum("110010110100", test_checksum, 12);
-  cprintf("TEST CSUM (110010110100): %s ", test_checksum);
-  if (strcmp(test_checksum, "110101") == 0) cprintf("PASS\r\n");
-  else cprintf("FAIL\r\n");
+  assert_string("TEST CSUM (110010110100)", test_checksum, "110101");
 
   /* Test full process from example */
   /* initial 10000, disk 20 */
@@ -143,13 +134,15 @@ void run_tests(void) {
   generate_dragon(test_data, 20);
   test_data[20] = '\0';
   calculate_checksum(test_data, test_checksum, 20);
-  cur_len = strlen(test_checksum);
-  while (cur_len % 2 == 0) {
-    calculate_checksum(test_checksum, test_next, cur_len);
-    strcpy(test_checksum, test_next);
-    cur_len = strlen(test_checksum);
+  get_final_checksum(test_checksum);
+  assert_string("TEST FULL (10000, 20)", test_checksum, "01100");
+}
+
+void assert_string(const char *label, const char *actual, const char *expected) {
+  cprintf("%s: %s ", label, actual);
+  if (strcmp(actual, expected) == 0) {
+    cprintf("PASS\r\n");
+  } else {
+    cprintf("FAIL (expected %s)\r\n", expected);
   }
-  cprintf("TEST FULL (10000, 20): %s ", test_checksum);
-  if (strcmp(test_checksum, "01100") == 0) cprintf("PASS\r\n");
-  else cprintf("FAIL\r\n");
 }
