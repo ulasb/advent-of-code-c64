@@ -70,7 +70,7 @@ void calculate_checksum(char *data, char *result, int len) {
   int i;
   int res_len = 0;
   
-  for (i = 0; i < len; i += 2) {
+  for (i = 0; i + 1 < len; i += 2) {
     if (data[i] == data[i+1]) {
       result[res_len++] = '1';
     } else {
