@@ -20,7 +20,7 @@ char hex_hash[33];
 char best_path[MAX_PATH_LEN];
 int max_path_len = 0;
 char next_path[128];
-char path_buf[MAX_PATH_LEN];
+char path_buf[MAX_PATH_LEN + 1];
 
 MD5_CTX passcode_ctx;
 char last_passcode[32] = "";
