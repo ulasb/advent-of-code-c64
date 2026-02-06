@@ -123,7 +123,7 @@ void find_longest(int start_x, int start_y) {
 typedef struct {
     int x, y;
     int path_len;
-    char path[64]; /* Shortest path probably not that long */
+    char path[128]; /* Shortest path probably not that long */
 } State;
 
 #define QUEUE_SIZE 100
