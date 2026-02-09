@@ -26,8 +26,8 @@ MD5_CTX passcode_ctx;
 char last_passcode[32] = "";
 
 uint8_t petscii_to_ascii(uint8_t c) {
-    if (c >= 0x41 && c <= 0x5A) return c + 0x20; /* PETSCII a-z (shifted mode) -> ASCII a-z */
-    if (c >= 0x61 && c <= 0x7A) return c - 0x20; /* PETSCII A-Z (shifted mode) -> ASCII A-Z */
+    if (c >= 0x41 && c <= 0x5A) return c + 0x20; /* cc65 'a'-'z' literal (PETSCII 'A'-'Z') -> ASCII 'a'-'z' */
+    if (c >= 0x61 && c <= 0x7A) return c - 0x20; /* cc65 'A'-'Z' literal (PETSCII 'a'-'z') -> ASCII 'A'-'Z' */
     return c;
 }
 
