@@ -1,27 +1,21 @@
 #ifndef MD5_H
 #define MD5_H
 
-#include <string.h>
+#include <stdint.h>
 
-/* MD5 constants and types */
-typedef unsigned long uint32;
-typedef unsigned char uint8;
-
-/* MD5 context */
+/* MD5 context. */
 typedef struct {
-    uint32 state[4];
-    uint32 count[2];
-    uint8 buffer[64];
+  uint32_t state[4]; /* state (ABCD) */
+  uint32_t count[2]; /* number of bits, modulo 2^64 (lsb first) */
+  uint8_t buffer[64]; /* input buffer */
 } MD5_CTX;
 
-/* MD5 basic functions */
-void md5_init(MD5_CTX *context);
-void md5_update(MD5_CTX *context, const uint8 *input, unsigned int input_len);
-void md5_final(uint8 digest[16], MD5_CTX *context);
-void md5_transform(uint32 state[4], const uint8 block[64]);
+void MD5Init(MD5_CTX *);
+void MD5Update(MD5_CTX *, const uint8_t *, uint32_t);
+void MD5Final(uint8_t[16], MD5_CTX *);
 
-/* Internal helpers used by MD5 implementation */
-void decode(uint32 *output, const uint8 *input, unsigned int len);
-void encode(uint8 *output, const uint32 *input, unsigned int len);
+#ifdef MD5_DEBUG
+void MD5_Internal_Tests(void);
+#endif
 
 #endif /* MD5_H */

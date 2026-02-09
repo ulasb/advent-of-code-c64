@@ -15,7 +15,7 @@ const int DY[] = {-1, 1, 0, 0};
 
 /* Global buffers to save stack space */
 char current_passcode[32];
-uint8 digest[16];
+uint8_t digest[16];
 char hex_hash[33];
 char best_path[MAX_PATH_LEN];
 int max_path_len = 0;
@@ -25,30 +25,44 @@ char path_buf[MAX_PATH_LEN + 1];
 MD5_CTX passcode_ctx;
 char last_passcode[32] = "";
 
+uint8_t petscii_to_ascii(uint8_t c) {
+    if (c >= 0x41 && c <= 0x5A) return c + 0x20; /* PETSCII a-z (shifted mode) -> ASCII a-z */
+    if (c >= 0x61 && c <= 0x7A) return c - 0x20; /* PETSCII A-Z (shifted mode) -> ASCII A-Z */
+    return c;
+}
+
+static MD5_CTX static_ctx;
+static uint8_t global_digest[16];
+
 void get_hex_hash(const char *passcode, const char *path) {
-    MD5_CTX ctx;
     int path_len = strlen(path);
+    int pass_len = strlen(passcode);
     static const char hex_chars[] = "0123456789abcdef";
+    static uint8_t buf[256];
+    int i;
+
+    for (i = 0; i < pass_len; ++i) {
+        buf[i] = petscii_to_ascii((uint8_t)passcode[i]);
+    }
+    for (i = 0; i < path_len; ++i) {
+        buf[pass_len + i] = petscii_to_ascii((uint8_t)path[i]);
+    }
+
+    MD5Init(&static_ctx);
+    MD5Update(&static_ctx, buf, (uint32_t)(pass_len + path_len));
+    MD5Final(global_digest, &static_ctx);
     
-    if (strcmp(last_passcode, passcode) != 0) {
-        md5_init(&passcode_ctx);
-        md5_update(&passcode_ctx, (uint8*)passcode, strlen(passcode));
-        strcpy(last_passcode, passcode);
+    if (path_len == 0) {
+        cprintf("DEBUG: hash of %s: %c%c%c%c\r\n", passcode, 
+            hex_chars[global_digest[0] >> 4], hex_chars[global_digest[0] & 0x0f],
+            hex_chars[global_digest[1] >> 4], hex_chars[global_digest[1] & 0x0f]);
     }
     
-    /* Clone the context after passcode */
-    memcpy(&ctx, &passcode_ctx, sizeof(MD5_CTX));
-    
-    if (path_len > 0) {
-        md5_update(&ctx, (uint8*)path, path_len);
-    }
-    md5_final(digest, &ctx);
-    
-    /* Only need first 4 characters */
-    hex_hash[0] = hex_chars[digest[0] >> 4];
-    hex_hash[1] = hex_chars[digest[0] & 0x0f];
-    hex_hash[2] = hex_chars[digest[1] >> 4];
-    hex_hash[3] = hex_chars[digest[1] & 0x0f];
+    /* Only need first 4 characters of the hex hash */
+    hex_hash[0] = hex_chars[global_digest[0] >> 4];
+    hex_hash[1] = hex_chars[global_digest[0] & 0x0f];
+    hex_hash[2] = hex_chars[global_digest[1] >> 4];
+    hex_hash[3] = hex_chars[global_digest[1] & 0x0f];
     hex_hash[4] = '\0';
 }
 
@@ -126,7 +140,7 @@ typedef struct {
     char path[128]; /* Shortest path probably not that long */
 } State;
 
-#define QUEUE_SIZE 100
+#define QUEUE_SIZE 80
 State queue[QUEUE_SIZE];
 int head = 0;
 int tail = 0;

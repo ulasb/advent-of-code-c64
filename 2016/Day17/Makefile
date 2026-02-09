@@ -1,23 +1,30 @@
 # Makefile for Advent of Code 2016 Day 17 - C64 version
 # Requires cc65 to be installed
 
-TARGET = day17.prg
-SOURCES = day17.c md5.c
-OBJECTS = day17.o md5.o
+TARGETS = day17.prg test_md5.prg
 
 # cc65 tools
 CC = cl65
-CFLAGS = -t c64 -O
+CFLAGS = -t c64
 
-all: $(TARGET)
+all: $(TARGETS)
 
-$(TARGET): $(SOURCES)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
+day17.prg: day17.c md5.c
+	$(CC) $(CFLAGS) -o day17.prg day17.c md5.c
+
+test_md5.prg: test_md5.c md5.c
+	$(CC) $(CFLAGS) -DMD5_DEBUG -o test_md5.prg test_md5.c md5.c
+
+print_chars.prg: print_chars.c
+	$(CC) $(CFLAGS) -o print_chars.prg print_chars.c
 
 clean:
-	rm -f $(TARGET) *.o
+	rm -f $(TARGETS) *.o
 
-run: $(TARGET)
-	x64sc $(TARGET)
+run: day17.prg
+	x64sc day17.prg
 
-.PHONY: all clean run
+run_test: test_md5.prg
+	x64sc test_md5.prg
+
+.PHONY: all clean run run_test
