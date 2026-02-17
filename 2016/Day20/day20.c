@@ -128,7 +128,9 @@ void solve_puzzle(void) {
 
     cprintf("\r\nSOLVING SAMPLE (%d ranges)...\r\n", SAMPLE_COUNT);
 
-    merged = merge_ranges(sample_ranges, SAMPLE_COUNT);
+    Range current_ranges[SAMPLE_COUNT];
+    memcpy(current_ranges, sample_ranges, sizeof(sample_ranges));
+    merged = merge_ranges(current_ranges, SAMPLE_COUNT);
 
     /* Part 1: First allowed IP */
     first_allowed = 0;
