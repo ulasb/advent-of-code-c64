@@ -21,6 +21,9 @@ Range sample_ranges[] = {
 
 #define SAMPLE_COUNT (sizeof(sample_ranges) / sizeof(Range))
 
+/* Global working buffer to avoid stack issues on C64 */
+Range working_ranges[SAMPLE_COUNT];
+
 /* Function prototypes */
 void run_tests(void);
 void solve_puzzle(void);
@@ -128,17 +131,17 @@ void solve_puzzle(void) {
 
     cprintf("\r\nSOLVING SAMPLE (%d ranges)...\r\n", SAMPLE_COUNT);
 
-    Range current_ranges[SAMPLE_COUNT];
-    memcpy(current_ranges, sample_ranges, sizeof(sample_ranges));
-    merged = merge_ranges(current_ranges, SAMPLE_COUNT);
+    /* Copy to working buffer to preserve original data and avoid stack usage */
+    memcpy(working_ranges, sample_ranges, sizeof(sample_ranges));
+    merged = merge_ranges(working_ranges, SAMPLE_COUNT);
 
     /* Part 1: First allowed IP */
     first_allowed = 0;
     for (i = 0; i < merged; i++) {
-        if (first_allowed < sample_ranges[i].start) {
+        if (first_allowed < working_ranges[i].start) {
             break;
         }
-        first_allowed = sample_ranges[i].end + 1;
+        first_allowed = working_ranges[i].end + 1;
     }
     cprintf("PART 1 (First Allowed): %lu\r\n", first_allowed);
 
@@ -146,7 +149,7 @@ void solve_puzzle(void) {
     /* Total addresses = 2^32 = 4294967296 */
     /* We count allowed by subtracting blocked from total */
     for (i = 0; i < merged; i++) {
-        blocked_count += (sample_ranges[i].end - sample_ranges[i].start + 1);
+        blocked_count += (working_ranges[i].end - working_ranges[i].start + 1);
     }
     
     /* Allowed = 4294967296 - blocked_count */

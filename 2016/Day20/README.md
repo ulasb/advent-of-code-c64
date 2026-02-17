@@ -48,6 +48,12 @@ To comply with distribution rules, the full puzzle input is **not included**. Th
 - **Expected Part 1:** `6`
 - **Expected Part 2:** `4294967268`
 
+### C64-Specific Challenges
+- **32-bit Math:** Used `unsigned long` for IP range calculations.
+- **Stack Limitations:** Avoided allocating large arrays on the stack (which is extremely limited on C64). Instead, moved working buffers to the global BSS segment.
+- **Data Integrity:** Used `memcpy` to copy original sample data into working buffers before merging, preserving the source data for multiple test rounds.
+- **Output:** Used `conio.h` for direct screen access, which is more reliable and faster than `stdio.h` on this platform.
+
 ## Files
 - `day20.c`: Main source code.
 - `Makefile`: Build script.
