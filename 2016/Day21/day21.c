@@ -6,6 +6,8 @@
 /* Global buffers for C64 stability */
 char current_password[16];
 char temp_buffer[16];
+char candidate_buffer[16];
+char check_buffer[16];
 
 /* Function Prototypes */
 void swap_position(char *pw, int x, int y);
@@ -97,16 +99,14 @@ void rotate_based_on_position(char *pw, char letter) {
 
 void undo_rotate_based_on_position(char *pw, char letter) {
   int i, len = strlen(pw);
-  char candidate[16];
-  char check[16];
   
   for (i = 0; i < len; i++) {
-    strcpy(candidate, pw);
-    rotate_left(candidate, i);
-    strcpy(check, candidate);
-    rotate_based_on_position(check, letter);
-    if (strcmp(check, pw) == 0) {
-      strcpy(pw, candidate);
+    strcpy(candidate_buffer, pw);
+    rotate_left(candidate_buffer, i);
+    strcpy(check_buffer, candidate_buffer);
+    rotate_based_on_position(check_buffer, letter);
+    if (strcmp(check_buffer, pw) == 0) {
+      strcpy(pw, candidate_buffer);
       return;
     }
   }
