@@ -1,7 +1,5 @@
 #include <conio.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define GRID_W 37
 #define GRID_H 27
@@ -11,16 +9,9 @@ typedef struct {
     unsigned int free;
 } Node;
 
-/* Global data */
-Node example_nodes[] = {
-    {8, 2}, {6, 5}, {28, 4},
-    {7, 2}, {0, 8}, {7, 4},
-    {6, 4}, {8, 1}, {6, 3}
-};
-
 /* Function Prototypes */
 void run_tests(void);
-int solve_part1(Node nodes[], int count);
+int solve_part1(const Node nodes[], int count);
 int solve_part2(int grid_w, int ex, int ey, int wx_start, int wy);
 
 int main(void) {
@@ -39,6 +30,11 @@ int main(void) {
 }
 
 void run_tests(void) {
+    static const Node example_nodes[] = {
+        {8, 2}, {6, 5}, {28, 4},
+        {7, 2}, {0, 8}, {7, 4},
+        {6, 4}, {8, 1}, {6, 3}
+    };
     int p1_res;
     int p2_res;
 
@@ -71,7 +67,7 @@ void run_tests(void) {
     cprintf("REAL PART 2: %d\r\n", p2_res);
 }
 
-int solve_part1(Node nodes[], int count) {
+int solve_part1(const Node nodes[], int count) {
     int i, j;
     int viable = 0;
     for (i = 0; i < count; i++) {

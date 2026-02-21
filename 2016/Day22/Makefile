@@ -8,6 +8,8 @@ SOURCES = day22.c
 OBJECTS = $(SOURCES:.c=.o)
 EXECUTABLE = day22.prg
 
+.PHONY: all clean
+
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
