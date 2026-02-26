@@ -27,106 +27,35 @@ typedef enum { REG_A, REG_B, REG_C, REG_D } RegName;
 long regs[4]; // a, b, c, d
 
 void init_program() {
-    int i;
-    for (i = 0; i < 26; ++i) {
-        original_prog[i].args[0].is_reg = 0;
-        original_prog[i].args[0].val = 0;
-        original_prog[i].args[1].is_reg = 0;
-        original_prog[i].args[1].val = 0;
-    }
-
-    // 0: cpy a b
-    original_prog[0].op = OP_CPY; original_prog[0].args[0].is_reg = 1; original_prog[0].args[0].val = 0;
-    original_prog[0].args[1].is_reg = 1; original_prog[0].args[1].val = 1;
-
-    // 1: dec b
-    original_prog[1].op = OP_DEC; original_prog[1].args[0].is_reg = 1; original_prog[1].args[0].val = 1;
-
-    // 2: cpy a d
-    original_prog[2].op = OP_CPY; original_prog[2].args[0].is_reg = 1; original_prog[2].args[0].val = 0;
-    original_prog[2].args[1].is_reg = 1; original_prog[2].args[1].val = 3;
-
-    // 3: cpy 0 a
-    original_prog[3].op = OP_CPY; original_prog[3].args[0].is_reg = 0; original_prog[3].args[0].val = 0;
-    original_prog[3].args[1].is_reg = 1; original_prog[3].args[1].val = 0;
-
-    // 4: cpy b c
-    original_prog[4].op = OP_CPY; original_prog[4].args[0].is_reg = 1; original_prog[4].args[0].val = 1;
-    original_prog[4].args[1].is_reg = 1; original_prog[4].args[1].val = 2;
-
-    // 5: inc a
-    original_prog[5].op = OP_INC; original_prog[5].args[0].is_reg = 1; original_prog[5].args[0].val = 0;
-
-    // 6: dec c
-    original_prog[6].op = OP_DEC; original_prog[6].args[0].is_reg = 1; original_prog[6].args[0].val = 2;
-
-    // 7: jnz c -2
-    original_prog[7].op = OP_JNZ; original_prog[7].args[0].is_reg = 1; original_prog[7].args[0].val = 2;
-    original_prog[7].args[1].is_reg = 0; original_prog[7].args[1].val = -2;
-
-    // 8: dec d
-    original_prog[8].op = OP_DEC; original_prog[8].args[0].is_reg = 1; original_prog[8].args[0].val = 3;
-
-    // 9: jnz d -5
-    original_prog[9].op = OP_JNZ; original_prog[9].args[0].is_reg = 1; original_prog[9].args[0].val = 3;
-    original_prog[9].args[1].is_reg = 0; original_prog[9].args[1].val = -5;
-
-    // 10: dec b
-    original_prog[10].op = OP_DEC; original_prog[10].args[0].is_reg = 1; original_prog[10].args[0].val = 1;
-
-    // 11: cpy b c
-    original_prog[11].op = OP_CPY; original_prog[11].args[0].is_reg = 1; original_prog[11].args[0].val = 1;
-    original_prog[11].args[1].is_reg = 1; original_prog[11].args[1].val = 2;
-
-    // 12: cpy c d
-    original_prog[12].op = OP_CPY; original_prog[12].args[0].is_reg = 1; original_prog[12].args[0].val = 2;
-    original_prog[12].args[1].is_reg = 1; original_prog[12].args[1].val = 3;
-
-    // 13: dec d
-    original_prog[13].op = OP_DEC; original_prog[13].args[0].is_reg = 1; original_prog[13].args[0].val = 3;
-
-    // 14: inc c
-    original_prog[14].op = OP_INC; original_prog[14].args[0].is_reg = 1; original_prog[14].args[0].val = 2;
-
-    // 15: jnz d -2
-    original_prog[15].op = OP_JNZ; original_prog[15].args[0].is_reg = 1; original_prog[15].args[0].val = 3;
-    original_prog[15].args[1].is_reg = 0; original_prog[15].args[1].val = -2;
-
-    // 16: tgl c
-    original_prog[16].op = OP_TGL; original_prog[16].args[0].is_reg = 1; original_prog[16].args[0].val = 2;
-
-    // 17: cpy -16 c
-    original_prog[17].op = OP_CPY; original_prog[17].args[0].is_reg = 0; original_prog[17].args[0].val = -16;
-    original_prog[17].args[1].is_reg = 1; original_prog[17].args[1].val = 2;
-
-    // 18: jnz 1 c
-    original_prog[18].op = OP_JNZ; original_prog[18].args[0].is_reg = 0; original_prog[18].args[0].val = 1;
-    original_prog[18].args[1].is_reg = 1; original_prog[18].args[1].val = 2;
-
-    // 19: cpy 84 c
-    original_prog[19].op = OP_CPY; original_prog[19].args[0].is_reg = 0; original_prog[19].args[0].val = 84;
-    original_prog[19].args[1].is_reg = 1; original_prog[19].args[1].val = 2;
-
-    // 20: jnz 80 d
-    original_prog[20].op = OP_JNZ; original_prog[20].args[0].is_reg = 0; original_prog[20].args[0].val = 80;
-    original_prog[20].args[1].is_reg = 1; original_prog[20].args[1].val = 3;
-
-    // 21: inc a
-    original_prog[21].op = OP_INC; original_prog[21].args[0].is_reg = 1; original_prog[21].args[0].val = 0;
-
-    // 22: inc d
-    original_prog[22].op = OP_INC; original_prog[22].args[0].is_reg = 1; original_prog[22].args[0].val = 3;
-
-    // 23: jnz d -2
-    original_prog[23].op = OP_JNZ; original_prog[23].args[0].is_reg = 1; original_prog[23].args[0].val = 3;
-    original_prog[23].args[1].is_reg = 0; original_prog[23].args[1].val = -2;
-
-    // 24: inc c
-    original_prog[24].op = OP_INC; original_prog[24].args[0].is_reg = 1; original_prog[24].args[0].val = 2;
-
-    // 25: jnz c -5
-    original_prog[25].op = OP_JNZ; original_prog[25].args[0].is_reg = 1; original_prog[25].args[0].val = 2;
-    original_prog[25].args[1].is_reg = 0; original_prog[25].args[1].val = -5;
+    static const Inst program_data[26] = {
+        {OP_CPY, {{1, REG_A}, {1, REG_B}}},      /* 0: cpy a b */
+        {OP_DEC, {{1, REG_B}, {0, 0}}},      /* 1: dec b */
+        {OP_CPY, {{1, REG_A}, {1, REG_D}}},      /* 2: cpy a d */
+        {OP_CPY, {{0, 0}, {1, REG_A}}},      /* 3: cpy 0 a */
+        {OP_CPY, {{1, REG_B}, {1, REG_C}}},      /* 4: cpy b c */
+        {OP_INC, {{1, REG_A}, {0, 0}}},      /* 5: inc a */
+        {OP_DEC, {{1, REG_C}, {0, 0}}},      /* 6: dec c */
+        {OP_JNZ, {{1, REG_C}, {0, -2}}},     /* 7: jnz c -2 */
+        {OP_DEC, {{1, REG_D}, {0, 0}}},      /* 8: dec d */
+        {OP_JNZ, {{1, REG_D}, {0, -5}}},     /* 9: jnz d -5 */
+        {OP_DEC, {{1, REG_B}, {0, 0}}},      /* 10: dec b */
+        {OP_CPY, {{1, REG_B}, {1, REG_C}}},      /* 11: cpy b c */
+        {OP_CPY, {{1, REG_C}, {1, REG_D}}},      /* 12: cpy c d */
+        {OP_DEC, {{1, REG_D}, {0, 0}}},      /* 13: dec d */
+        {OP_INC, {{1, REG_C}, {0, 0}}},      /* 14: inc c */
+        {OP_JNZ, {{1, REG_D}, {0, -2}}},     /* 15: jnz d -2 */
+        {OP_TGL, {{1, REG_C}, {0, 0}}},      /* 16: tgl c */
+        {OP_CPY, {{0, -16}, {1, REG_C}}},    /* 17: cpy -16 c */
+        {OP_JNZ, {{0, 1}, {1, REG_C}}},      /* 18: jnz 1 c */
+        {OP_CPY, {{0, 84}, {1, REG_C}}},     /* 19: cpy 84 c */
+        {OP_JNZ, {{0, 80}, {1, REG_D}}},     /* 20: jnz 80 d */
+        {OP_INC, {{1, REG_A}, {0, 0}}},      /* 21: inc a */
+        {OP_INC, {{1, REG_D}, {0, 0}}},      /* 22: inc d */
+        {OP_JNZ, {{1, REG_D}, {0, -2}}},     /* 23: jnz d -2 */
+        {OP_INC, {{1, REG_C}, {0, 0}}},      /* 24: inc c */
+        {OP_JNZ, {{1, REG_C}, {0, -5}}},     /* 25: jnz c -5 */
+    };
+    memcpy(original_prog, program_data, sizeof(program_data));
 }
 
 long get_val(Arg *a) {
