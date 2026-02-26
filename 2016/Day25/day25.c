@@ -82,7 +82,7 @@ int run_with_a(long initial_a) {
     int pc = 0;
     int next_expected = 0;
     int outputs_found = 0;
-    long safety_counter = 0;
+    int safety_counter = 0;
     Instruction* instr;
     
     regs[0] = initial_a;
