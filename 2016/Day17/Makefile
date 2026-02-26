@@ -5,7 +5,10 @@ TARGETS = day17.prg test_md5.prg
 
 # cc65 tools
 CC = cl65
-CFLAGS = -t c64
+CFLAGS = -t c64 -DFORCE_PETSCII_TO_ASCII
+# Uncomment to force PETSCII->ASCII conversion if your toolchain doesn't
+# automatically define __CC65__
+# (the flag is enabled by default in this Makefile)
 
 all: $(TARGETS)
 
