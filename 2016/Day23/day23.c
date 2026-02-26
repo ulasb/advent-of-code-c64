@@ -23,7 +23,8 @@ typedef struct {
 
 Inst original_prog[26];
 Inst work_prog[26];
-long regs[4]; // 0=a, 1=b, 2=c, 3=d
+typedef enum { REG_A, REG_B, REG_C, REG_D } RegName;
+long regs[4]; // a, b, c, d
 
 void init_program() {
     int i;
