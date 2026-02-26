@@ -34,37 +34,36 @@ We recommend building without high optimization (`-O`) if you encounter stabilit
 ## Build Instructions
 
 Requires `cc65` installed and in your path.
-=======
-- Handles inputs larger than 64KB (uses 32-bit length).
-- Memory-efficient: `const` padding saved in ROM/data.
-- Conditional debugging system via preprocessor macros.
-
-## The "Tricky Stuff" (C64/cc65 Specifics)
-
-### 1. 32-bit Arithmetic & Type Promotion
-`cc65` uses 16-bit `int` and `unsigned int`. The MD5 algorithm requires 32-bit precision for state, bit-counts, and buffer management. 
-- **Solution**: All internal state and length variables are defined as `uint32_t` (from `<stdint.h>`). We use explicit `& 0xFFFFFFFFUL` masking to ensure correct 32-bit truncation on the 8-bit CPU.
-
-### 2. Expression Complexity
-Deep expression trees can confuse the `cc65` code generator or exceed its register capacity.
-- **Solution**: Round transformations are broken down into simple, atomic C statements to ensure stable code generation.
-
-### 3. PETSCII vs. ASCII
-The C64 uses PETSCII locally. Standard MD5 vectors are ASCII-based.
-- **Solution**: Test cases in `main.c` use explicit ASCII hex byte arrays to guarantee correctness against the MD5 spec.
-
-### 4. Debugging & Code Size
-Logging with `printf` and internal consistency tests consume significant space on the 1MHz/64KB C64.
-- **Solution**: A macro-based logging system (`MD5_DEBUG`) allows zero-overhead production builds. 
-
-## Build Instructions
-
-Requires `cc65` installed.
 
 ```bash
 make clean
 make
 ```
+
+### PETSCII vs. ASCII when building with `cc65`
+
+String literals compiled with `cc65` are PETSCII on the C64. The MD5 tests and
+Advent of Code solver expect ASCII bytes when computing hashes. The source
+provides conditional conversion from PETSCII to ASCII, but some toolchains or
+build environments may not define `__CC65__` automatically.
+
+If you see mismatched hashes or failing tests on the C64 build, build with the
+explicit conversion enabled:
+
+```bash
+cl65 -t c64 -DFORCE_PETSCII_TO_ASCII -O -o day17.prg day17.c md5.c
+```
+
+Or update the `Makefile` to add `-DFORCE_PETSCII_TO_ASCII` to the `CFLAGS`.
+
+Alternatively, when testing on the host, you can reproduce PETSCII literal
+encoding by building the host simulator which defines `SIMULATE_PETSCII`:
+
+```bash
+gcc -std=c99 -Wall -O2 -DSIMULATE_PETSCII day17.c md5.c -o day17_host_sim
+./day17_host_sim
+```
+
 
 ## Usage
 

@@ -14,6 +14,7 @@
 
 #define MAX_INSTR 32
 #define MAX_CHECK 30  /* Number of outputs to check for validity */
+#define MAX_A_SEARCH 1000
 
 typedef enum {
     OP_CPY, OP_INC, OP_DEC, OP_JNZ, OP_OUT
@@ -163,7 +164,7 @@ int main(void) {
     
     cprintf("SEARCHING FOR LOWEST 'A'...\r\n");
     
-    while (a < 1000) {
+    while (a < MAX_A_SEARCH) {
         if (a % 20 == 0) {
             gotoxy(0, 7);
             cprintf("TESTING A: %ld  ", a);
@@ -179,8 +180,8 @@ int main(void) {
         a++;
     }
     
-    if (a >= 1000) {
-        cprintf("\r\nNO RESULT FOUND UP TO 1000.\r\n");
+    if (a >= MAX_A_SEARCH) {
+        cprintf("\r\nNO RESULT FOUND UP TO %u.\r\n", MAX_A_SEARCH);
     }
     
     cprintf("\r\nDONE.\r\n");
