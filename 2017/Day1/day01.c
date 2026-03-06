@@ -1,11 +1,6 @@
 #include <conio.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-/* Global buffers to avoid stack overflow on 6502 */
-#define MAX_INPUT_LEN 64
-char test_input[MAX_INPUT_LEN];
 
 /* Function Prototypes */
 void run_tests(void);
