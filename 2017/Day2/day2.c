@@ -103,7 +103,7 @@ int solve_part2(int rows[][16], int row_lengths[], int row_count) {
         a = rows[i][j];
         b = rows[i][k];
         
-        if (a % b == 0) {
+        if (b != 0 && a % b == 0) {
           checksum += (a / b);
           found = 1;
           break;
