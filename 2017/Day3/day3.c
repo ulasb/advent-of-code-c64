@@ -62,15 +62,10 @@ unsigned long find_first_larger(long goal) {
     int dx = 1, dy = 0;
     int nx, ny;
     unsigned long val;
-    int i, j;
     int temp;
 
     /* Initialize grid with zeros */
-    for (i = 0; i < GRID_SIZE; i++) {
-        for (j = 0; j < GRID_SIZE; j++) {
-            spiral_grid[i][j] = 0;
-        }
-    }
+    memset(spiral_grid, 0, sizeof(spiral_grid));
 
     /* Start at center (square 1) */
     spiral_grid[x + OFFSET][y + OFFSET] = 1;
@@ -112,31 +107,42 @@ unsigned long find_first_larger(long goal) {
 }
 
 void run_tests(void) {
+    long res_p1;
+    unsigned long res_p2;
+
     cprintf("\r\nRUNNING TESTS...\r\n");
 
-    cprintf("PART 1 (1): %ld (exp 0) ", find_distance(1L));
-    if (find_distance(1L) == 0) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p1 = find_distance(1L);
+    cprintf("PART 1 (1): %ld (exp 0) ", res_p1);
+    if (res_p1 == 0) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 
-    cprintf("PART 1 (12): %ld (exp 3) ", find_distance(12L));
-    if (find_distance(12L) == 3) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p1 = find_distance(12L);
+    cprintf("PART 1 (12): %ld (exp 3) ", res_p1);
+    if (res_p1 == 3) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 
-    cprintf("PART 1 (23): %ld (exp 2) ", find_distance(23L));
-    if (find_distance(23L) == 2) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p1 = find_distance(23L);
+    cprintf("PART 1 (23): %ld (exp 2) ", res_p1);
+    if (res_p1 == 2) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 
-    cprintf("PART 1 (1024): %ld (exp 31) ", find_distance(1024L));
-    if (find_distance(1024L) == 31) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p1 = find_distance(1024L);
+    cprintf("PART 1 (1024): %ld (exp 31) ", res_p1);
+    if (res_p1 == 31) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 
-    cprintf("\r\nPART 2 (G>1): %lu (exp 2) ", find_first_larger(1L));
-    if (find_first_larger(1L) == 2) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p2 = find_first_larger(1L);
+    cprintf("\r\nPART 2 (G>1): %lu (exp 2) ", res_p2);
+    if (res_p2 == 2) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 
-    cprintf("PART 2 (G>10): %lu (exp 11) ", find_first_larger(10L));
-    if (find_first_larger(10L) == 11) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p2 = find_first_larger(10L);
+    cprintf("PART 2 (G>10): %lu (exp 11) ", res_p2);
+    if (res_p2 == 11) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 
-    cprintf("PART 2 (G>100): %lu (exp 122) ", find_first_larger(100L));
-    if (find_first_larger(100L) == 122) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p2 = find_first_larger(100L);
+    cprintf("PART 2 (G>100): %lu (exp 122) ", res_p2);
+    if (res_p2 == 122) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 
-    cprintf("PART 2 (G>800): %lu (exp 806) ", find_first_larger(800L));
-    if (find_first_larger(800L) == 806) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
+    res_p2 = find_first_larger(800L);
+    cprintf("PART 2 (G>800): %lu (exp 806) ", res_p2);
+    if (res_p2 == 806) cprintf("OK\r\n"); else cprintf("FAIL\r\n");
 }
 
 int main(void) {
