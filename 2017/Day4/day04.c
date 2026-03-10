@@ -39,15 +39,19 @@ int main(void) {
 
 void sort_string(char *s) {
     int n = strlen(s);
-    int i, j;
+    int i, j, min_idx;
     char temp;
     for (i = 0; i < n - 1; i++) {
+        min_idx = i;
         for (j = i + 1; j < n; j++) {
-            if (s[i] > s[j]) {
-                temp = s[i];
-                s[i] = s[j];
-                s[j] = temp;
+            if (s[j] < s[min_idx]) {
+                min_idx = j;
             }
+        }
+        if (min_idx != i) {
+            temp = s[i];
+            s[i] = s[min_idx];
+            s[min_idx] = temp;
         }
     }
 }
