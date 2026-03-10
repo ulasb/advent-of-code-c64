@@ -15,6 +15,7 @@ int is_valid_part1(const char *phrase);
 int is_valid_part2(const char *phrase);
 void sort_string(char *s);
 int split_words(const char *phrase);
+int has_no_duplicates(int count);
 void test_p1(const char *phrase, int expected);
 void test_p2(const char *phrase, int expected);
 
@@ -83,12 +84,8 @@ int split_words(const char *phrase) {
     return count;
 }
 
-int is_valid_part1(const char *phrase) {
-    int count = split_words(phrase);
+int has_no_duplicates(int count) {
     int i, j;
-
-    if (count <= 0) return 0;
-
     for (i = 0; i < count; i++) {
         for (j = i + 1; j < count; j++) {
             if (strcmp(global_words[i], global_words[j]) == 0) return 0;
@@ -97,9 +94,15 @@ int is_valid_part1(const char *phrase) {
     return 1;
 }
 
+int is_valid_part1(const char *phrase) {
+    int count = split_words(phrase);
+    if (count <= 0) return 0;
+    return has_no_duplicates(count);
+}
+
 int is_valid_part2(const char *phrase) {
     int count = split_words(phrase);
-    int i, j;
+    int i;
 
     if (count <= 0) return 0;
 
@@ -108,12 +111,7 @@ int is_valid_part2(const char *phrase) {
         sort_string(global_words[i]);
     }
 
-    for (i = 0; i < count; i++) {
-        for (j = i + 1; j < count; j++) {
-            if (strcmp(global_words[i], global_words[j]) == 0) return 0;
-        }
-    }
-    return 1;
+    return has_no_duplicates(count);
 }
 
 void test_p1(const char *phrase, int expected) {
