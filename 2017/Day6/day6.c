@@ -35,7 +35,7 @@ int main(void) {
 int solve(unsigned char *initial_banks, int num_banks, int *loop_size) {
   unsigned char current_banks[MAX_BANKS];
   int cycles = 0;
-  int i, j;
+  int i;
   int found = -1;
   int max_val, max_idx;
   int blocks;
@@ -72,14 +72,7 @@ int solve(unsigned char *initial_banks, int num_banks, int *loop_size) {
 
     /* Check if seen */
     for (i = 0; i < cycles; i++) {
-      int match = 1;
-      for (j = 0; j < num_banks; j++) {
-        if (states[i][j] != current_banks[j]) {
-          match = 0;
-          break;
-        }
-      }
-      if (match) {
+      if (memcmp(states[i], current_banks, num_banks) == 0) {
         found = i;
         break;
       }
@@ -103,7 +96,7 @@ void run_tests(void) {
   cprintf("\r\nRUNNING TESTS...\r\n");
   cprintf("TEST CASE: 0 2 7 0\r\n");
 
-  cycles = solve(test_banks, 4, &loop_size);
+  cycles = solve(test_banks, sizeof(test_banks), &loop_size);
 
   cprintf("PART 1 (CYCLES): ");
   if (cycles == 5) {
