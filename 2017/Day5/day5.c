@@ -28,21 +28,24 @@ int main(void) {
 }
 
 void run_tests(void) {
-  int part1_example[] = {0, 3, 0, 1, -3};
-  int part2_example[] = {0, 3, 0, 1, -3};
+  int example_template[] = {0, 3, 0, 1, -3};
+  int count = sizeof(example_template) / sizeof(example_template[0]);
+  int test_data[5];
   int p1_res, p2_res;
 
   cprintf("\r\nRUNNING TESTS...\r\n");
 
   cprintf("TEST PART 1: ");
-  p1_res = solve_part1(part1_example, 5);
+  memcpy(test_data, example_template, sizeof(example_template));
+  p1_res = solve_part1(test_data, count);
   if (p1_res == 5)
     cprintf("PASS\r\n");
   else
     cprintf("FAIL (got %d)\r\n", p1_res);
 
   cprintf("TEST PART 2: ");
-  p2_res = solve_part2(part2_example, 5);
+  memcpy(test_data, example_template, sizeof(example_template));
+  p2_res = solve_part2(test_data, count);
   if (p2_res == 10)
     cprintf("PASS\r\n");
   else
