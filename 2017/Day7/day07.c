@@ -20,6 +20,7 @@ const char* solve_part1(Program progs[], int count);
 int solve_part2(Program progs[], int count);
 int get_prog_idx(Program progs[], int count, const char* name);
 int calculate_weights(Program progs[], int count, int root_idx);
+void find_child_imbalance(Program progs[], int count, int node_idx, int* abnormal_node, int* normal_weight);
 int find_imbalance(Program progs[], int count, int node_idx, int target_weight);
 
 int main(void) {
@@ -139,19 +140,15 @@ int calculate_weights(Program progs[], int count, int root_idx) {
     return total;
 }
 
-int find_imbalance(Program progs[], int count, int node_idx, int target_weight) {
-    int i, j, c, w, diff;
+void find_child_imbalance(Program progs[], int count, int node_idx, int* abnormal_node, int* normal_weight) {
+    int i, j, c, w;
     int child_idx;
-    int normal_weight = -1;
-    int abnormal_node = -1;
     int weights[MAX_CHILDREN];
     int child_indices[MAX_CHILDREN];
     int num_children = progs[node_idx].num_children;
 
-    if (num_children == 0) {
-        diff = progs[node_idx].total_weight - target_weight;
-        return progs[node_idx].weight - diff;
-    }
+    *abnormal_node = -1;
+    *normal_weight = -1;
 
     for (i = 0; i < num_children; i++) {
         child_idx = get_prog_idx(progs, count, progs[node_idx].children[i]);
@@ -167,11 +164,25 @@ int find_imbalance(Program progs[], int count, int node_idx, int target_weight) 
             if (weights[j] == w) c++;
         }
         if (c == 1) {
-            abnormal_node = child_indices[i];
+            *abnormal_node = child_indices[i];
         } else {
-            normal_weight = w;
+            *normal_weight = w;
         }
     }
+}
+
+int find_imbalance(Program progs[], int count, int node_idx, int target_weight) {
+    int diff;
+    int normal_weight = -1;
+    int abnormal_node = -1;
+    int num_children = progs[node_idx].num_children;
+
+    if (num_children == 0) {
+        diff = progs[node_idx].total_weight - target_weight;
+        return progs[node_idx].weight - diff;
+    }
+
+    find_child_imbalance(progs, count, node_idx, &abnormal_node, &normal_weight);
 
     if (abnormal_node == -1 || normal_weight == -1) {
         /* All children are balanced, so the imbalance is exactly at this node */
@@ -185,37 +196,14 @@ int find_imbalance(Program progs[], int count, int node_idx, int target_weight) 
 int solve_part2(Program progs[], int count) {
     const char* root_name = solve_part1(progs, count);
     int root_idx = get_prog_idx(progs, count, root_name);
-    int i, j, w, c;
-    int child_idx;
-    int weights[MAX_CHILDREN];
-    int child_indices[MAX_CHILDREN];
     int normal_weight = -1;
     int abnormal_node = -1;
-    int num_children;
 
     if (root_idx == -1) return -1;
 
     calculate_weights(progs, count, root_idx);
 
-    num_children = progs[root_idx].num_children;
-    for (i = 0; i < num_children; i++) {
-        child_idx = get_prog_idx(progs, count, progs[root_idx].children[i]);
-        child_indices[i] = child_idx;
-        weights[i] = progs[child_idx].total_weight;
-    }
-
-    for (i = 0; i < num_children; i++) {
-        w = weights[i];
-        c = 0;
-        for (j = 0; j < num_children; j++) {
-            if (weights[j] == w) c++;
-        }
-        if (c == 1) {
-            abnormal_node = child_indices[i];
-        } else {
-            normal_weight = w;
-        }
-    }
+    find_child_imbalance(progs, count, root_idx, &abnormal_node, &normal_weight);
 
     if (abnormal_node != -1 && normal_weight != -1) {
         return find_imbalance(progs, count, abnormal_node, normal_weight);
