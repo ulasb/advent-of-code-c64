@@ -130,7 +130,7 @@ int main(void) {
   cprintf("============================\r\n");
 
   cprintf("\r\nRUNNING SAMPLE INSTRUCTIONS...\r\n");
-  for (i = 0; i < 4; i++) {
+  for (i = 0; i < sizeof(sample_input) / sizeof(sample_input[0]); i++) {
     cprintf("> %s\r\n", sample_input[i]);
     run_instruction(sample_input[i]);
   }
