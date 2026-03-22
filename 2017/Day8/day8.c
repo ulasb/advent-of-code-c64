@@ -76,7 +76,7 @@ void run_instruction(const char *line) {
   long cond_val;
 
   /* Format: b inc 5 if a > 1 */
-  sscanf(line, "%s %s %ld %s %s %s %ld", target, op, &amount, if_token, cond_reg,
+  sscanf(line, "%7s %3s %ld %2s %7s %3s %ld", target, op, &amount, if_token, cond_reg,
          cond_op, &cond_val);
 
   if (evaluate_condition(cond_reg, cond_op, cond_val)) {
